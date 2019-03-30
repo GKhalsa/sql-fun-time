@@ -3,8 +3,10 @@
 }
 
 .App__header {
-  font-size: 2vw;
+  font-size: 2em;
   font-family: 'Coiny', cursive;
+  display:flex;
+  justify-content: space-around;
 }
 
 .App__main {
@@ -12,7 +14,6 @@
 }
 
 body {
-  /*background-color: #ffc194;*/
   background-color: #F1ECE4;
 }
 
@@ -25,7 +26,8 @@ body {
   width: 50vw;
   height: 50vw;
   border-radius: 10px;
-  background-color: #B1B8CB;
+  background-color: #7787b2;
+  box-shadow: 0 0 13px -3px #000;
 }
 
 .right__tabe--group {
@@ -42,4 +44,79 @@ body {
   margin-right: 2em;
   font-family: 'PT Sans', sans-serif;
   font-size: 1.1em;
+}
+
+i {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  height: 0.3em;
+  width: 0.3em;
+  margin-top: 0.5em;
+  box-shadow: 0 0 8px -3px #000;
+}
+
+.arrow__left {
+  transform: rotate(135deg);
+  cursor: pointer;
+}
+
+.arrow__right {
+  transform: rotate(-45deg);
+  cursor: pointer;
+}
+
+.level__select {
+  display: flex;
+  font-size: 0.8em;
+  font-family: 'Coiny', cursive;
+}
+
+.select__dropdown{
+  margin-top: 0.1em;
+  height: 1.5em;
+  box-shadow: 0 0 8px -3px #000;
+  cursor: pointer;
+}
+
+.level__drop__box {
+  position: absolute;
+  z-index: 2;
+  transform: translateX(-0.55em);
+  box-shadow: 0 0 13px -3px #000;
+  height: 6em;
+  width: 5em;
+  background-color: #7787b2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
+}
+
+.level__option {
+  box-shadow: 0 0 13px -3px #000;
+  width: 1.2em;
+  height: 1.2em;
+  font-size: 0.5em;
+  border-radius: 43px;
+  text-align: center;
+  cursor: pointer;
+  margin: 2px;
+  line-height: 1.4em;
+  background-color: #b1b8cb;
+}
+
+.arrow-up__container {
+  display: flex;
+  justify-content: center;
+}
+
+.arrow-up {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+
+  border-bottom: 10px solid #7787b2;
 }

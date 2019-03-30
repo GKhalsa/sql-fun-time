@@ -17,9 +17,11 @@ class App extends Component {
         dbColumns: [],
         queryValues: [],
         queryColumns: [],
+        dropDownOpen: false,
     };
 
     async componentDidMount() {
+        document.addEventListener("mousedown", this.checkForClickOutsideLevels);
 
         const createTable =
             `CREATE TABLE IF NOT EXISTS
@@ -55,6 +57,60 @@ class App extends Component {
         this.setState({dbColumns, dbValues});
     }
 
+    componentWillUnmount(){
+        document.addEventListener("mousedown", this.checkForClickOutsideLevels);
+    }
+
+    checkForClickOutsideLevels = (e) => {
+        if (!e.target.classList.contains("dropdown")){
+            this.setState({dropDownOpen:false})
+        }
+    };
+
+    areObjectsEqual(obj1, obj2) {
+        const a = Object.keys(obj1).every(key => {
+            return obj1[key] === obj2[key]
+        })
+
+        const b = Object.keys(obj2).every(key => {
+            return obj1[key] === obj2[key]
+        })
+
+        return a && b;
+    }
+
+
+    checkForMatch = (queryColumns, queryValues) => {
+        const {dbColumns, dbValues} = this.state;
+
+
+        const a = dbColumns.every((dbColumn) => {
+            return queryColumns.some((queryColumn) => {
+                return dbColumn.accessor === queryColumn.accessor;
+            })
+        });
+
+        const b = queryColumns.every((queryColumn) => {
+            return dbColumns.some((dbColumn) => {
+                return dbColumn.accessor === queryColumn.accessor;
+            })
+        });
+
+        const c = dbValues.every((dbValue) => {
+            return queryValues.some((queryValue) => {
+                return this.areObjectsEqual(dbValue, queryValue)
+            })
+        });
+
+        const d = queryValues.every((queryValue) => {
+            return dbValues.some((dbValue) => {
+                return this.areObjectsEqual(dbValue, queryValue)
+            })
+        });
+
+
+    };
+
     submitSql = () => {
         let res = this.db.exec(this.state.sqlValue);
         const {columns, values} = res[0];
@@ -68,6 +124,8 @@ class App extends Component {
                 return acc;
             }, {})
         });
+
+        this.checkForMatch(queryColumns, queryValues);
 
         this.setState({queryColumns, queryValues});
     };
@@ -90,7 +148,37 @@ class App extends Component {
                     <div className="App__left">
 
                         <div className="App__header">
-                            SQL FUN TIME
+                            <div>
+                                SQL FUN TIME
+                            </div>
+                            <div>
+                                <div className="level__select dropdown">
+                                    <i className="arrow__left dropdown"> </i>
+                                    <div className="select__dropdown dropdown"
+                                         onClick={() => this.setState((prevState) => ({dropDownOpen: !prevState.dropDownOpen}))} >
+                                        Level 1
+                                    </div>
+                                    <i className="arrow__right dropdown"> </i>
+                                </div>
+                                <div className="level__drop__container dropdown">
+                                    {this.state.dropDownOpen ?
+                                        <div>
+                                            <div className="arrow-up__container dropdown">
+                                                <div class="arrow-up dropdown"></div>
+                                            </div>
+                                            <div className="level__drop__box dropdown">
+                                                {[1,2,3,4,5,6,7,8,9,10,11].map((level) => {
+                                                    return (
+                                                        <div className="level__option dropdown">{level}</div>
+                                                    )
+                                                })}
+                                            </div>
+                                        </div>
+                                        :
+                                        null}
+                                </div>
+                            </div>
+
                         </div>
 
                         <div className="left__level__text">
@@ -127,15 +215,15 @@ class App extends Component {
                         <div className="">
 
                             <ReactTable
-                            data={queryValues}
-                            header="Users"
-                            columns={queryColumns}
-                            defaultPageSize={4}
-                            showPageSizeOptions={false}
-                            showPagination={false}
-                            style={{
-                            height: "150px"
-                            }}
+                                data={queryValues}
+                                header="Users"
+                                columns={queryColumns}
+                                defaultPageSize={4}
+                                showPageSizeOptions={false}
+                                showPagination={false}
+                                style={{
+                                    height: "150px"
+                                }}
                             />
 
                             <div>Person Table</div>
