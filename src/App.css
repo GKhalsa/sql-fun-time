@@ -120,3 +120,35 @@ i {
 
   border-bottom: 10px solid #7787b2;
 }
+
+.table__container {
+  background-color: whitesmoke;
+  margin: 2em;
+  box-shadow: 0 0 13px -3px #000;
+}
+
+.table__header {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  font-weight: 100;
+}
+
+.run__button {
+  background-color: #b1b8cb;
+  border-radius: 5px;
+  width: 5em;
+  box-shadow: 0 0 13px -3px #000;
+  cursor: pointer;
+  font-family: 'Coiny', cursive;
+  line-height: 2em;
+  font-size: 1.3em;
+}
+
+button:focus {outline:0;}
+
+.button__group {
+  display:flex;
+  justify-content: space-between;
+  margin-left:3em;
+  margin-right:6em;
+}

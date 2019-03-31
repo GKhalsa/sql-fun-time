@@ -108,6 +108,8 @@ class App extends Component {
             })
         });
 
+        return a && b && c && d;
+
 
     };
 
@@ -125,7 +127,7 @@ class App extends Component {
             }, {})
         });
 
-        this.checkForMatch(queryColumns, queryValues);
+        const isMatch = this.checkForMatch(queryColumns, queryValues);
 
         this.setState({queryColumns, queryValues});
     };
@@ -206,7 +208,11 @@ class App extends Component {
                                 tabSize: 2,
                                 wrap: true,
                             }}/>
-                        <button onClick={this.submitSql}>Run</button>
+                        <div className="button__group">
+                            <button className="run__button" >Answer</button>
+                            <button className="run__button" onClick={this.submitSql}>Run</button>
+                        </div>
+
 
 
                     </div>
@@ -214,30 +220,48 @@ class App extends Component {
                     <div className="App__right">
                         <div className="">
 
-                            <ReactTable
-                                data={queryValues}
-                                header="Users"
-                                columns={queryColumns}
-                                defaultPageSize={4}
-                                showPageSizeOptions={false}
-                                showPagination={false}
-                                style={{
-                                    height: "150px"
-                                }}
-                            />
+                            <div className="table__container">
+                                <div className="table__header">Query Result</div>
+                                <ReactTable
+                                    data={queryValues}
+                                    header="Users"
+                                    columns={queryColumns}
+                                    defaultPageSize={4}
+                                    showPageSizeOptions={false}
+                                    showPagination={false}
+                                    style={{
+                                        height: "150px"
+                                    }}
+                                />
+                            </div>
 
-                            <div>Person Table</div>
+                            <div className="table__container">
+                                <div className="table__header">Expected Result</div>
+                                <ReactTable
+                                    data={dbValues}
+                                    columns={dbColumns}
+                                    defaultPageSize={4}
+                                    showPageSizeOptions={false}
+                                    showPagination={false}
+                                    style={{
+                                        height: "150px"
+                                    }}
+                                />
+                            </div>
 
-                            <ReactTable
-                                data={dbValues}
-                                columns={dbColumns}
-                                defaultPageSize={4}
-                                showPageSizeOptions={false}
-                                showPagination={false}
-                                style={{
-                                    height: "150px"
-                                }}
-                            />
+                            <div className="table__container">
+                                <div className="table__header">Person</div>
+                                <ReactTable
+                                    data={dbValues}
+                                    columns={dbColumns}
+                                    defaultPageSize={4}
+                                    showPageSizeOptions={false}
+                                    showPagination={false}
+                                    style={{
+                                        height: "150px"
+                                    }}
+                                />
+                            </div>
                         </div>
 
                     </div>
