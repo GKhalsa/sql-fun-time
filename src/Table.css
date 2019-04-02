@@ -1,0 +1,11 @@
+.table__container {
+    background-color: whitesmoke;
+    margin: 2em;
+    box-shadow: 0 0 13px -3px #000;
+}
+
+.table__header {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    font-weight: 100;
+}

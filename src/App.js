@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import AceEditor from 'react-ace';
-import ReactTable from "react-table";
 import sql from 'sql.js';
-import {levels} from './levelText'
+import {levelText, queries} from './levelData'
+import {checkForMatch, capitalize} from './helpers'
+import {Table} from './Table'
 
 import './App.css';
 import 'brace/mode/mysql';
@@ -11,50 +12,80 @@ import 'react-table/react-table.css'
 
 class App extends Component {
 
-    state = {
-        sqlValue: `select * from person;`,
-        dbValues: [],
-        dbColumns: [],
-        queryValues: [],
-        queryColumns: [],
-        dropDownOpen: false,
-    };
-
-    async componentDidMount() {
-        document.addEventListener("mousedown", this.checkForClickOutsideLevels);
-
-        const createTable =
-            `CREATE TABLE IF NOT EXISTS
-              person(
-                id serial PRIMARY KEY,
-                name VARCHAR(128) NOT NULL,
-                age INT NOT NULL
-              )`;
-
-
-        const insert = `INSERT into person (id, name, age) values (${Date.now()},'Asem',12)`;
-        const insert2 = `INSERT into person (id, name, age) values (${Date.now() + 1},'Asem',12)`;
-
+    constructor(props){
+        super(props);
+        this.state = {
+            sqlValue: ``,
+            queryValues: [],
+            queryColumns: [],
+            dropDownOpen: false,
+            level: null,
+            completedLevels: [],
+            levelText: '',
+            tablesWithValues:{},
+            expectedColumns:[],
+            expectedValues: []
+        };
         this.db = new sql.Database();
-        this.db.run(createTable);
-        this.db.run(insert);
-        this.db.run(insert2);
-        // this.db.run(insert);
-        let res = this.db.exec("select * from person");
-        //
-        const {columns, values} = res[0];
-        const dbColumns = columns.map(column => {
-            return {Header: this.capitalize(column), accessor: column}
-        });
+    }
 
-        const dbValues = values.map((valueSet) => {
+    formatColumns(columns){
+        return columns.map(column => {
+                return {Header: capitalize(column), accessor: column}
+            });
+    }
+
+    formatValues(columns, values){
+        return values.map((valueSet) => {
             return valueSet.reduce((acc, value, index) => {
                 acc[columns[index]] = value;
                 return acc;
             }, {})
         });
+    }
 
-        this.setState({dbColumns, dbValues});
+    clear = () => {
+        for (const table in this.state.tablesWithValues) {
+            const dropQuery = "DROP TABLE IF EXISTS " + table;
+            this.db.exec(dropQuery);
+        }
+        this.setState({queryValues:[], queryColumns:[], tablesWithValues:{}})
+    }
+
+    levelSetup = (level) => {
+        this.clear()
+        this.db.run(queries[level].databaseSetup);
+        const tables = this.db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';")[0].values;
+        const tablesWithValues = tables.reduce((acc,table) => {
+            const {columns, values} = this.db.exec(`SELECT * from ${table}`)[0];
+            acc[table] = {
+                columns: this.formatColumns(columns),
+                values: this.formatValues(columns, values)
+            };
+            return acc
+        }, {});
+
+        const {columns, values} = this.db.exec(queries[level].answer)[0];
+        this.setState({tablesWithValues, levelText: levelText[level], expectedValues: this.formatValues(columns, values), expectedColumns: this.formatColumns(columns)})
+    };
+
+    componentDidUpdate(_,prevState) {
+        if (prevState.level !== this.state.level) {
+            this.levelSetup(this.state.level)
+        }
+    }
+
+    async componentDidMount() {
+        document.addEventListener("mousedown", this.checkForClickOutsideLevels);
+        const storageState = localStorage.getItem('sqlState');
+        if (storageState) {
+            const parsedState = JSON.parse(storageState)
+            const {level, completedLevels} = parsedState
+            this.setState({level, completedLevels})
+        } else {
+            this.setState({level: 1})
+        }
+
     }
 
     componentWillUnmount(){
@@ -67,57 +98,13 @@ class App extends Component {
         }
     };
 
-    areObjectsEqual(obj1, obj2) {
-        const a = Object.keys(obj1).every(key => {
-            return obj1[key] === obj2[key]
-        })
-
-        const b = Object.keys(obj2).every(key => {
-            return obj1[key] === obj2[key]
-        })
-
-        return a && b;
-    }
-
-
-    checkForMatch = (queryColumns, queryValues) => {
-        const {dbColumns, dbValues} = this.state;
-
-
-        const a = dbColumns.every((dbColumn) => {
-            return queryColumns.some((queryColumn) => {
-                return dbColumn.accessor === queryColumn.accessor;
-            })
-        });
-
-        const b = queryColumns.every((queryColumn) => {
-            return dbColumns.some((dbColumn) => {
-                return dbColumn.accessor === queryColumn.accessor;
-            })
-        });
-
-        const c = dbValues.every((dbValue) => {
-            return queryValues.some((queryValue) => {
-                return this.areObjectsEqual(dbValue, queryValue)
-            })
-        });
-
-        const d = queryValues.every((queryValue) => {
-            return dbValues.some((dbValue) => {
-                return this.areObjectsEqual(dbValue, queryValue)
-            })
-        });
-
-        return a && b && c && d;
-
-
-    };
 
     submitSql = () => {
         let res = this.db.exec(this.state.sqlValue);
         const {columns, values} = res[0];
+
         const queryColumns = columns.map(column => {
-            return {Header: this.capitalize(column), accessor: column}
+            return {Header: capitalize(column), accessor: column}
         });
 
         const queryValues = values.map((valueSet) => {
@@ -127,21 +114,25 @@ class App extends Component {
             }, {})
         });
 
-        const isMatch = this.checkForMatch(queryColumns, queryValues);
+        const {expectedColumns, expectedValues, level, completedLevels} = this.state;
+
+        const isMatch = checkForMatch(queryColumns, queryValues, expectedColumns, expectedValues);
+
+        if (isMatch) {
+            completedLevels.push(level);
+            this.setState({queryColumns, queryValues, level: level + 1, completedLevels})
+        }
 
         this.setState({queryColumns, queryValues});
     };
 
-    capitalize = (string) => {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    };
 
     onSqlChange = (sqlValue) => {
         this.setState({sqlValue})
     };
 
     render() {
-        const {dbValues, dbColumns, queryValues, queryColumns} = this.state;
+        const {queryValues, queryColumns, expectedColumns, expectedValues, tablesWithValues, level} = this.state;
         return (
             <div className="App">
 
@@ -168,12 +159,15 @@ class App extends Component {
                                             <div className="arrow-up__container dropdown">
                                                 <div class="arrow-up dropdown"></div>
                                             </div>
+
                                             <div className="level__drop__box dropdown">
-                                                {[1,2,3,4,5,6,7,8,9,10,11].map((level) => {
-                                                    return (
-                                                        <div className="level__option dropdown">{level}</div>
-                                                    )
-                                                })}
+                                                {
+                                                    Object.keys(levelText).map((level) => {
+                                                        return (
+                                                            <div className="level__option dropdown">{level}</div>
+                                                        )
+                                                    })
+                                                }
                                             </div>
                                         </div>
                                         :
@@ -184,7 +178,7 @@ class App extends Component {
                         </div>
 
                         <div className="left__level__text">
-                            {levels['1']}
+                            {levelText[level]}
                         </div>
 
                         <AceEditor
@@ -193,7 +187,6 @@ class App extends Component {
                             mode="mysql"
                             theme="monokai"
                             name="blah2"
-                            // onLoad={this.onLoad}
                             onChange={this.onSqlChange}
                             fontSize={16}
                             showPrintMargin={true}
@@ -209,59 +202,24 @@ class App extends Component {
                                 wrap: true,
                             }}/>
                         <div className="button__group">
-                            <button className="run__button" >Answer</button>
+                            <button className="run__button" >Show Answer</button>
                             <button className="run__button" onClick={this.submitSql}>Run</button>
                         </div>
-
-
 
                     </div>
 
                     <div className="App__right">
                         <div className="">
 
-                            <div className="table__container">
-                                <div className="table__header">Query Result</div>
-                                <ReactTable
-                                    data={queryValues}
-                                    header="Users"
-                                    columns={queryColumns}
-                                    defaultPageSize={4}
-                                    showPageSizeOptions={false}
-                                    showPagination={false}
-                                    style={{
-                                        height: "150px"
-                                    }}
-                                />
-                            </div>
+                            <Table header="Query Result" values={queryValues} columns={queryColumns}/>
+                            <Table header="Expected Result" values={expectedValues} columns={expectedColumns}/>
+                            {
+                                Object.keys(tablesWithValues).map(table => {
+                                    const {columns, values} = tablesWithValues[table];
+                                    return <Table header={table} values={values} columns={columns}/>
+                                })
+                            }
 
-                            <div className="table__container">
-                                <div className="table__header">Expected Result</div>
-                                <ReactTable
-                                    data={dbValues}
-                                    columns={dbColumns}
-                                    defaultPageSize={4}
-                                    showPageSizeOptions={false}
-                                    showPagination={false}
-                                    style={{
-                                        height: "150px"
-                                    }}
-                                />
-                            </div>
-
-                            <div className="table__container">
-                                <div className="table__header">Person</div>
-                                <ReactTable
-                                    data={dbValues}
-                                    columns={dbColumns}
-                                    defaultPageSize={4}
-                                    showPageSizeOptions={false}
-                                    showPagination={false}
-                                    style={{
-                                        height: "150px"
-                                    }}
-                                />
-                            </div>
                         </div>
 
                     </div>
