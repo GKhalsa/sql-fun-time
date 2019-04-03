@@ -133,7 +133,6 @@ i {
 
 .run__button {
   background-color: whitesmoke;
-  /*border-radius: 5px;*/
   width: 5em;
   box-shadow: 0 0 13px -3px #000;
   cursor: pointer;
@@ -159,12 +158,22 @@ code {
   padding-right: 0.3em;
 }
 
-@keyframes correct {
+@keyframes correct1 {
   from {box-shadow: 0}
-  to {box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 78px rgba(82, 168, 236, 0.6)}
+  to {box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 78px rgba(63, 195, 128, 1)}
 }
 
-@keyframes inCorrect {
+@keyframes correct2 {
+  from {box-shadow: 0}
+  to {box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 78px rgba(63, 195, 128, 1)}
+}
+
+@keyframes incorrect1 {
+  from {box-shadow: 0}
+  to {box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 78px rgba(240, 52, 52, 1)}
+}
+
+@keyframes incorrect2 {
   from {box-shadow: 0}
   to {box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 78px rgba(240, 52, 52, 1)}
 }

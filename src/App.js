@@ -25,6 +25,7 @@ class App extends Component {
             tablesWithValues:{},
             expectedColumns:[],
             expectedValues: [],
+            submitGlow:""
         };
         this.db = new sql.Database();
     }
@@ -98,6 +99,26 @@ class App extends Component {
         }
     };
 
+    determineGlow(isMatch, currentGlow) {
+        if (!isMatch) {
+            if (currentGlow == "" || currentGlow == "correct1" || currentGlow == "correct2") {
+                return "incorrect1"
+            } else if (currentGlow == "incorrect1"){
+                return "incorrect2"
+            } else if (currentGlow == "incorrect2") {
+                return "incorrect1"
+            }
+        } else if (isMatch) {
+            if (currentGlow == "" || currentGlow == "incorrect1" || currentGlow == "incorrect2") {
+                return "correct1"
+            } else if (currentGlow == "correct1") {
+                return "correct2"
+            } else if (currentGlow == "correct2") {
+                return "correct1"
+            }
+        }
+    }
+
 
     submitSql = async () => {
         let res = this.db.exec(this.state.sqlValue);
@@ -106,20 +127,22 @@ class App extends Component {
         const queryColumns = this.formatColumns(columns);
         const queryValues = this.formatValues(columns,values);
 
-        const {expectedColumns, expectedValues, level, completedLevels} = this.state;
+        const {expectedColumns, expectedValues, level, completedLevels,submitGlow} = this.state;
 
         const isMatch = checkForMatch(queryColumns, queryValues, expectedColumns, expectedValues);
+        const getSubmitGlow = this.determineGlow(isMatch,submitGlow);
 
         if (isMatch) {
             const addToCompletedLevels = [...completedLevels,level];
-            this.setState({queryColumns, queryValues, level: level + 1, completedLevels: addToCompletedLevels})
+            this.setState({queryColumns, queryValues, level: level + 1, completedLevels: addToCompletedLevels, submitGlow: getSubmitGlow})
         }
 
-        this.setState({queryColumns, queryValues});
+
+        this.setState({queryColumns, queryValues, submitGlow:getSubmitGlow});
     };
 
     render() {
-        const {queryValues, queryColumns, expectedColumns, expectedValues, tablesWithValues, level, completedLevels} = this.state;
+        const {queryValues, queryColumns, expectedColumns, expectedValues, tablesWithValues, level, completedLevels, submitGlow} = this.state;
         return (
             <div className="App">
 
@@ -174,7 +197,7 @@ class App extends Component {
                                 mode="mysql"
                                 theme="monokai"
                                 // name="blah2"
-                                style={{margin: '2em',animation: "inCorrect 1s 2 alternate", animationName:"inCorrect"}}
+                                style={{margin: '2em',animation: `${submitGlow} 1s 2 alternate`}}
                                 // style={{margin: '2em', boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 78px rgba(82, 168, 236, 0.6)"}}
                                 onChange={(sqlValue) => this.setState({sqlValue})}
                                 fontSize={16}
@@ -192,7 +215,7 @@ class App extends Component {
                                 }}/>
 
                         <div className="button__group">
-                            <button className="run__button" >Show Answer</button>
+                            <button className="run__button" onClick={() => this.setState({sqlValue: queries[level].answer})}>Show Answer</button>
                             <button className="run__button" onClick={this.submitSql}>Run</button>
                         </div>
 
