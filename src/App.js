@@ -25,7 +25,8 @@ class App extends Component {
             tablesWithValues:{},
             expectedColumns:[],
             expectedValues: [],
-            submitGlow:""
+            submitGlow:"",
+            error: ""
         };
         this.db = new sql.Database();
     }
@@ -121,28 +122,37 @@ class App extends Component {
 
 
     submitSql = async () => {
-        let res = this.db.exec(this.state.sqlValue);
+        const {expectedColumns, expectedValues, level, completedLevels,submitGlow, sqlValue} = this.state;
+        if (sqlValue == "") {return;}
+        let res;
+
+        try {
+            res = this.db.exec(sqlValue);
+        } catch (e){
+            this.setState({error: e.message});
+            return;
+        }
+
         const {columns, values} = res[0];
 
         const queryColumns = this.formatColumns(columns);
         const queryValues = this.formatValues(columns,values);
 
-        const {expectedColumns, expectedValues, level, completedLevels,submitGlow} = this.state;
 
         const isMatch = checkForMatch(queryColumns, queryValues, expectedColumns, expectedValues);
         const getSubmitGlow = this.determineGlow(isMatch,submitGlow);
 
         if (isMatch) {
             const addToCompletedLevels = [...completedLevels,level];
-            this.setState({queryColumns, queryValues, level: level + 1, completedLevels: addToCompletedLevels, submitGlow: getSubmitGlow})
+            this.setState({queryColumns, queryValues, level: level + 1, completedLevels: addToCompletedLevels, submitGlow: getSubmitGlow, error:""})
         }
 
 
-        this.setState({queryColumns, queryValues, submitGlow:getSubmitGlow});
+        this.setState({queryColumns, queryValues, submitGlow:getSubmitGlow, error:""});
     };
 
     render() {
-        const {queryValues, queryColumns, expectedColumns, expectedValues, tablesWithValues, level, completedLevels, submitGlow} = this.state;
+        const {queryValues, queryColumns, expectedColumns, expectedValues, tablesWithValues, level, completedLevels, submitGlow, error} = this.state;
         return (
             <div className="App">
 
@@ -213,6 +223,9 @@ class App extends Component {
                                     tabSize: 2,
                                     wrap: true,
                                 }}/>
+                        <div>
+                            {error}
+                        </div>
 
                         <div className="button__group">
                             <button className="run__button" onClick={() => this.setState({sqlValue: queries[level].answer})}>Show Answer</button>
