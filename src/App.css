@@ -30,9 +30,10 @@ body {
   box-shadow: 0 0 13px -3px #000;
 }
 
-#blah2{
-  margin: 2em;
-}
+/*#blah2{*/
+  /*margin: 2em;*/
+  /*box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 78px rgba(82, 168, 236, 0.6);*/
+/*}*/
 
 .left__level__text {
   text-align: left;
@@ -101,6 +102,19 @@ i {
   margin: 2px;
   line-height: 1.4em;
   background-color: #b1b8cb;
+  border: 1px solid transparent;
+}
+
+.level__complete {
+  background-color: #F1ECE4;
+}
+
+.current__level__option{
+  border: 1px solid whitesmoke;
+}
+
+.level__option:hover {
+  border: 1px solid whitesmoke;
 }
 
 .arrow-up__container {
@@ -143,4 +157,14 @@ code {
   border: solid grey 1px;
   padding-left: 0.3em;
   padding-right: 0.3em;
+}
+
+@keyframes correct {
+  from {box-shadow: 0}
+  to {box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 78px rgba(82, 168, 236, 0.6)}
+}
+
+@keyframes inCorrect {
+  from {box-shadow: 0}
+  to {box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 78px rgba(240, 52, 52, 1)}
 }

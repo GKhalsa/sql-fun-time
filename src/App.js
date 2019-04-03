@@ -24,7 +24,7 @@ class App extends Component {
             levelText: '',
             tablesWithValues:{},
             expectedColumns:[],
-            expectedValues: []
+            expectedValues: [],
         };
         this.db = new sql.Database();
     }
@@ -50,10 +50,10 @@ class App extends Component {
             this.db.exec(dropQuery);
         }
         this.setState({queryValues:[], queryColumns:[], tablesWithValues:{}})
-    }
+    };
 
     levelSetup = (level) => {
-        this.clear()
+        this.clear();
         this.db.run(queries[level].databaseSetup);
         const tables = this.db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';")[0].values;
         const tablesWithValues = tables.reduce((acc,table) => {
@@ -79,8 +79,8 @@ class App extends Component {
         document.addEventListener("mousedown", this.checkForClickOutsideLevels);
         const storageState = localStorage.getItem('sqlState');
         if (storageState) {
-            const parsedState = JSON.parse(storageState)
-            const {level, completedLevels} = parsedState
+            const parsedState = JSON.parse(storageState);
+            const {level, completedLevels} = parsedState;
             this.setState({level, completedLevels})
         } else {
             this.setState({level: 1})
@@ -99,40 +99,27 @@ class App extends Component {
     };
 
 
-    submitSql = () => {
+    submitSql = async () => {
         let res = this.db.exec(this.state.sqlValue);
         const {columns, values} = res[0];
 
-        const queryColumns = columns.map(column => {
-            return {Header: capitalize(column), accessor: column}
-        });
-
-        const queryValues = values.map((valueSet) => {
-            return valueSet.reduce((acc, value, index) => {
-                acc[columns[index]] = value;
-                return acc;
-            }, {})
-        });
+        const queryColumns = this.formatColumns(columns);
+        const queryValues = this.formatValues(columns,values);
 
         const {expectedColumns, expectedValues, level, completedLevels} = this.state;
 
         const isMatch = checkForMatch(queryColumns, queryValues, expectedColumns, expectedValues);
 
         if (isMatch) {
-            completedLevels.push(level);
-            this.setState({queryColumns, queryValues, level: level + 1, completedLevels})
+            const addToCompletedLevels = [...completedLevels,level];
+            this.setState({queryColumns, queryValues, level: level + 1, completedLevels: addToCompletedLevels})
         }
 
         this.setState({queryColumns, queryValues});
     };
 
-
-    onSqlChange = (sqlValue) => {
-        this.setState({sqlValue})
-    };
-
     render() {
-        const {queryValues, queryColumns, expectedColumns, expectedValues, tablesWithValues, level} = this.state;
+        const {queryValues, queryColumns, expectedColumns, expectedValues, tablesWithValues, level, completedLevels} = this.state;
         return (
             <div className="App">
 
@@ -146,25 +133,25 @@ class App extends Component {
                             </div>
                             <div>
                                 <div className="level__select dropdown">
-                                    <i className="arrow__left dropdown"> </i>
+                                    <i onClick={() => this.setState(prevState => ({level: (prevState.level > 1) ? prevState.level - 1 : prevState.level}))} className="arrow__left dropdown"> </i>
                                     <div className="select__dropdown dropdown"
                                          onClick={() => this.setState((prevState) => ({dropDownOpen: !prevState.dropDownOpen}))} >
-                                        Level 1
+                                        Level {level}
                                     </div>
-                                    <i className="arrow__right dropdown"> </i>
+                                    <i onClick={() => this.setState(prevState => ({level: (prevState.level < Object.keys(levelText).length) ? prevState.level + 1 : prevState.level}))} className="arrow__right dropdown"> </i>
                                 </div>
                                 <div className="level__drop__container dropdown">
                                     {this.state.dropDownOpen ?
                                         <div>
                                             <div className="arrow-up__container dropdown">
-                                                <div class="arrow-up dropdown"></div>
+                                                <div className="arrow-up dropdown"></div>
                                             </div>
 
                                             <div className="level__drop__box dropdown">
                                                 {
-                                                    Object.keys(levelText).map((level) => {
+                                                    Object.keys(levelText).map((levelNum) => {
                                                         return (
-                                                            <div className="level__option dropdown">{level}</div>
+                                                            <div onClick={() => this.setState({level: parseInt(levelNum)})} className={`level__option dropdown ${completedLevels.some(completedLevel => completedLevel == levelNum.toString()) ? "level__complete":""} ${levelNum == level ? "current__level__option":""}`}>{levelNum}</div>
                                                         )
                                                     })
                                                 }
@@ -181,26 +168,29 @@ class App extends Component {
                             {levelText[level]}
                         </div>
 
-                        <AceEditor
-                            height="13em"
-                            width="45em"
-                            mode="mysql"
-                            theme="monokai"
-                            name="blah2"
-                            onChange={this.onSqlChange}
-                            fontSize={16}
-                            showPrintMargin={true}
-                            showGutter={true}
-                            highlightActiveLine={true}
-                            value={this.state.sqlValue}
-                            setOptions={{
-                                enableBasicAutocompletion: false,
-                                enableLiveAutocompletion: false,
-                                enableSnippets: false,
-                                showLineNumbers: true,
-                                tabSize: 2,
-                                wrap: true,
-                            }}/>
+                            <AceEditor
+                                height="13em"
+                                width="45em"
+                                mode="mysql"
+                                theme="monokai"
+                                // name="blah2"
+                                style={{margin: '2em',animation: "inCorrect 1s 2 alternate", animationName:"inCorrect"}}
+                                // style={{margin: '2em', boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 78px rgba(82, 168, 236, 0.6)"}}
+                                onChange={(sqlValue) => this.setState({sqlValue})}
+                                fontSize={16}
+                                showPrintMargin={true}
+                                showGutter={true}
+                                highlightActiveLine={true}
+                                value={this.state.sqlValue}
+                                setOptions={{
+                                    enableBasicAutocompletion: false,
+                                    enableLiveAutocompletion: false,
+                                    enableSnippets: false,
+                                    showLineNumbers: true,
+                                    tabSize: 2,
+                                    wrap: true,
+                                }}/>
+
                         <div className="button__group">
                             <button className="run__button" >Show Answer</button>
                             <button className="run__button" onClick={this.submitSql}>Run</button>
