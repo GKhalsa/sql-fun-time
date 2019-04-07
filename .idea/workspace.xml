@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="998b56e7-00d9-40c2-9282-baa72d4dcb50" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/App.js" afterPath="$PROJECT_DIR$/src/App.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/helpers.js" afterPath="$PROJECT_DIR$/src/helpers.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/levelData.js" afterPath="$PROJECT_DIR$/src/levelData.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -37,8 +34,8 @@
       <file leaf-file-name="levelData.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/levelData.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="617">
-              <caret line="58" column="528" lean-forward="false" selection-start-line="58" selection-start-column="528" selection-end-line="58" selection-end-column="528" />
+            <state relative-caret-position="655">
+              <caret line="60" column="566" lean-forward="false" selection-start-line="60" selection-start-column="566" selection-end-line="60" selection-end-column="566" />
               <folding />
             </state>
           </provider>
@@ -602,12 +599,12 @@
       <workItem from="1550434125834" duration="1129000" />
       <workItem from="1550800476121" duration="6707000" />
       <workItem from="1552412375860" duration="3911000" />
-      <workItem from="1552875951013" duration="70474000" />
+      <workItem from="1552875951013" duration="70613000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="89657000" />
+    <option name="totallyTimeSpent" value="89796000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1676" height="1027" extended-state="6" />
@@ -866,8 +863,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/levelData.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="617">
-          <caret line="58" column="528" lean-forward="false" selection-start-line="58" selection-start-column="528" selection-end-line="58" selection-end-column="528" />
+        <state relative-caret-position="655">
+          <caret line="60" column="566" lean-forward="false" selection-start-line="60" selection-start-column="566" selection-end-line="60" selection-end-column="566" />
           <folding />
         </state>
       </provider>
