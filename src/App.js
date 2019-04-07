@@ -133,22 +133,24 @@ class App extends Component {
             return;
         }
 
-        const {columns, values} = res[0];
+        if (res.length !== 0) {
 
-        const queryColumns = this.formatColumns(columns);
-        const queryValues = this.formatValues(columns,values);
+            const {columns, values} = res[0];
+            const queryColumns = this.formatColumns(columns);
+            const queryValues = this.formatValues(columns,values);
 
 
-        const isMatch = checkForMatch(queryColumns, queryValues, expectedColumns, expectedValues);
-        const getSubmitGlow = this.determineGlow(isMatch,submitGlow);
+            const isMatch = checkForMatch(queryColumns, queryValues, expectedColumns, expectedValues);
+            const getSubmitGlow = this.determineGlow(isMatch,submitGlow);
 
-        if (isMatch) {
-            const addToCompletedLevels = [...completedLevels,level];
-            this.setState({queryColumns, queryValues, level: level + 1, completedLevels: addToCompletedLevels, submitGlow: getSubmitGlow, error:""})
+            if (isMatch) {
+                const addToCompletedLevels = [...completedLevels,level];
+                this.setState({queryColumns, queryValues, level: level + 1, completedLevels: addToCompletedLevels, submitGlow: getSubmitGlow, error:""})
+            }
+            this.setState({queryColumns, queryValues, submitGlow:getSubmitGlow, error:""});
+        } else {
+            this.setState({error: "", queryColumns:[], queryValues:[], submitGlow:this.determineGlow(false,submitGlow)})
         }
-
-
-        this.setState({queryColumns, queryValues, submitGlow:getSubmitGlow, error:""});
     };
 
     render() {
@@ -206,9 +208,7 @@ class App extends Component {
                                 width="45em"
                                 mode="mysql"
                                 theme="monokai"
-                                // name="blah2"
                                 style={{margin: '2em',animation: `${submitGlow} 1s 2 alternate`}}
-                                // style={{margin: '2em', boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 78px rgba(82, 168, 236, 0.6)"}}
                                 onChange={(sqlValue) => this.setState({sqlValue})}
                                 fontSize={16}
                                 showPrintMargin={true}

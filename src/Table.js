@@ -10,7 +10,7 @@ export const Table = ({header, values, columns}) => (
             data={values}
             header="Users"
             columns={columns}
-            defaultPageSize={4}
+            defaultPageSize={8}
             showPageSizeOptions={false}
             showPagination={false}
             style={{
