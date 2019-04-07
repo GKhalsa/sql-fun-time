@@ -7,7 +7,7 @@ const createBillingTable =
                 id INTEGER PRIMARY KEY,
                 employee_id INT NOT NULL,
                 role VARCHAR(128) NOT NULL,
-                product VARCHAR(128) NOT NULL
+                product VARCHAR(128) NOT NULL,
                 hours INT NOT NULL
               );`;
 
@@ -25,7 +25,7 @@ const insertIntoPerson = (name, age) => (
 );
 
 const insertIntoBilling = (employee_id,role, product, hours) => (
-    `INSERT into billing (employee_id,role,product,hours) values ('${employee_id}', ${role},'${product}', ${hours});`
+    `INSERT into billing (employee_id,role,product,hours) values (${employee_id}, '${role}','${product}', ${hours});`
 )
 
 export const levelText = {
@@ -40,6 +40,8 @@ export const levelText = {
     9: <div>Select the age and name of the oldest person</div>,
     10: <div>If you want the column to show up as Age and not MAX(age) we can use <code>AS</code> to alias our columns. <code>SELECT MAX(age) AS age, name FROM person</code> is the syntax. Below return two columns: Name_of_youngest and Age_of_youngest.</div>,
     11: <div>Let's say that for ease of readability/lookup we want to display our results alphabetically or numerically. In order to achieve this you can use the <code>ORDER BY</code> clause on one ore more columns. If you want to alphabetically sort your results by name you could do that by writing <code>SELECT * FROM person ORDER BY name</code>. By default <code>ORDER BY</code> is ascending meaning a-z in this case, if we wanted to order our results z-a we could add <code>DESC</code> to the end like so: <code>SELECT * FROM person ORDER BY name DESC</code>. Below return the names and ages of any person whose name contains the letter 'n' sorted oldest to youngest.</div>,
+    12: <div>Often when you query for data using aggregates: <code>SUM</code><code>AVG</code><code>MIN</code> etc. you might also want to do it in groups. Instead of finding the age sum for all people named Sam, you might want to do it for every name at once. You can use... you guessed it <code>GROUP BY</code>! Let's take a look at the billing table because I asked myself what is the most riveting thing I could imagine and I came up with billing. To come up with the total amount of hours worked per product you could write <code>SELECT product, SUM(hours) AS total_hours FROM billing GROUP BY product</code>. Below find the total amount of hours worked per role.</div>,
+
 };
 
 export const queries = {
@@ -54,6 +56,7 @@ export const queries = {
     9: {databaseSetup: createPersonTable + insertIntoPerson('Linus',44) + insertIntoPerson('Tina',13) + insertIntoPerson('Devin',26) + insertIntoPerson('Jerome',50), answer: "SELECT MAX(age), name FROM person"},
     10: {databaseSetup: createPersonTable + insertIntoPerson('Linus',44) + insertIntoPerson('Tina',13) + insertIntoPerson('Devin',26) + insertIntoPerson('Jerome',50), answer: "SELECT name AS name_of_youngest, MIN(age) AS age_of_youngest FROM person"},
     11: {databaseSetup: createPersonTable + insertIntoPerson('Linus',44) + insertIntoPerson('Tina',13) + insertIntoPerson('Devin',26) + insertIntoPerson('Jerome',50), answer: "SELECT name, age FROM person WHERE name LIKE '%n%' ORDER BY age DESC"},
+    12: {databaseSetup: createBillingTable + insertIntoBilling(10,"Engineer","Video Stream", 35) + insertIntoBilling(11,"Engineer","Video Stream", 33) + insertIntoBilling(12,"Engineer","Video Stream", 40) + insertIntoBilling(13,"Product Manager","Video Stream", 45) + insertIntoBilling(14,"Designer","Video Stream", 40) + insertIntoBilling(15,"Engineer","Call Recorder", 29) + insertIntoBilling(16,"Engineer","Call Recorder", 40) + insertIntoBilling(17,"Product Manager","Call Recorder", 40), answer: "SELECT role, SUM(hours) AS total_hours FROM billing GROUP BY role"},
     // 7: {databaseSetup: createAnimalTable + insertIntoAnimal('The Village Tavern', 'brown') + insertIntoAnimal('Elephant', 'grey'), answer: ""}
 
 

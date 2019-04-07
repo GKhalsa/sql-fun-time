@@ -44,3 +44,23 @@ export const checkForMatch = (queryColumns, queryValues, expectedColumns, expect
 export const capitalize = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
+
+export const determineGlow =(isMatch, currentGlow) => {
+    if (!isMatch) {
+        if (currentGlow == "" || currentGlow == "correct1" || currentGlow == "correct2") {
+            return "incorrect1"
+        } else if (currentGlow == "incorrect1"){
+            return "incorrect2"
+        } else if (currentGlow == "incorrect2") {
+            return "incorrect1"
+        }
+    } else if (isMatch) {
+        if (currentGlow == "" || currentGlow == "incorrect1" || currentGlow == "incorrect2") {
+            return "correct1"
+        } else if (currentGlow == "correct1") {
+            return "correct2"
+        } else if (currentGlow == "correct2") {
+            return "correct1"
+        }
+    }
+}

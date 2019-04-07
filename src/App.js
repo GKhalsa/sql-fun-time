@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import AceEditor from 'react-ace';
 import sql from 'sql.js';
 import {levelText, queries} from './levelData'
-import {checkForMatch, capitalize} from './helpers'
+import {checkForMatch, capitalize, determineGlow} from './helpers'
 import {Table} from './Table'
 
 import './App.css';
@@ -51,7 +51,7 @@ class App extends Component {
             const dropQuery = "DROP TABLE IF EXISTS " + table;
             this.db.exec(dropQuery);
         }
-        this.setState({queryValues:[], queryColumns:[], tablesWithValues:{}})
+        this.setState({queryValues:[], queryColumns:[], tablesWithValues:{}, sqlValue:""})
     };
 
     levelSetup = (level) => {
@@ -100,27 +100,6 @@ class App extends Component {
         }
     };
 
-    determineGlow(isMatch, currentGlow) {
-        if (!isMatch) {
-            if (currentGlow == "" || currentGlow == "correct1" || currentGlow == "correct2") {
-                return "incorrect1"
-            } else if (currentGlow == "incorrect1"){
-                return "incorrect2"
-            } else if (currentGlow == "incorrect2") {
-                return "incorrect1"
-            }
-        } else if (isMatch) {
-            if (currentGlow == "" || currentGlow == "incorrect1" || currentGlow == "incorrect2") {
-                return "correct1"
-            } else if (currentGlow == "correct1") {
-                return "correct2"
-            } else if (currentGlow == "correct2") {
-                return "correct1"
-            }
-        }
-    }
-
-
     submitSql = async () => {
         const {expectedColumns, expectedValues, level, completedLevels,submitGlow, sqlValue} = this.state;
         if (sqlValue == "") {return;}
@@ -141,15 +120,16 @@ class App extends Component {
 
 
             const isMatch = checkForMatch(queryColumns, queryValues, expectedColumns, expectedValues);
-            const getSubmitGlow = this.determineGlow(isMatch,submitGlow);
+            const getSubmitGlow = determineGlow(isMatch,submitGlow);
 
             if (isMatch) {
                 const addToCompletedLevels = [...completedLevels,level];
                 this.setState({queryColumns, queryValues, level: level + 1, completedLevels: addToCompletedLevels, submitGlow: getSubmitGlow, error:""})
+            } else {
+                this.setState({queryColumns, queryValues, submitGlow:getSubmitGlow, error:""});
             }
-            this.setState({queryColumns, queryValues, submitGlow:getSubmitGlow, error:""});
         } else {
-            this.setState({error: "", queryColumns:[], queryValues:[], submitGlow:this.determineGlow(false,submitGlow)})
+            this.setState({error: "", queryColumns:[], queryValues:[], submitGlow:determineGlow(false,submitGlow)})
         }
     };
 
