@@ -11,6 +11,32 @@ const createBillingTable =
                 hours INT NOT NULL
               );`;
 
+const createNormalizedBillingTable =
+    `CREATE TABLE IF NOT EXISTS
+              billing(
+                id INTEGER PRIMARY KEY,
+                employee_id INT NOT NULL,
+                product_id INT NOT NULL,
+                hours INT NOT NULL
+              );`;
+
+
+const createEmployeeTable =
+    `CREATE TABLE IF NOT EXISTS
+              employee(
+                id INTEGER PRIMARY KEY,
+                name VARCHAR(128) NOT NULL,
+                role VARCHAR(128) NOT NULL,
+                age INT NOT NULL
+              );`;
+
+const createProductTable =
+    `CREATE TABLE IF NOT EXISTS
+              product(
+                id INTEGER PRIMARY KEY,
+                name VARCHAR(128) NOT NULL,
+                revenue INT NOT NULL
+              );`;
 
 const createPersonTable =
     `CREATE TABLE IF NOT EXISTS
@@ -20,13 +46,28 @@ const createPersonTable =
                 age INT NOT NULL
               );`;
 
+
+
+
 const insertIntoPerson = (name, age) => (
     `INSERT into person (name, age) values ('${name}', ${age});`
 );
 
 const insertIntoBilling = (employee_id,role, product, hours) => (
     `INSERT into billing (employee_id,role,product,hours) values (${employee_id}, '${role}','${product}', ${hours});`
-)
+);
+
+const insertIntoNormalizedBilling = (employee_id, product_id, hours) => (
+    `INSERT into billing (employee_id,product_id,hours) values (${employee_id},${product_id}, ${hours});`
+);
+
+const insertIntoEmployee = (name, role, age) => (
+    `INSERT into employee (name, role, age) values ('${name}','${role}',${age});`
+);
+
+const insertIntoProduct = (name, revenue) => (
+    `INSERT into product (name, revenue) values ('${name}',${revenue});`
+);
 
 export const levelText = {
     1: <div>Hello and welcome to SQL fun time! Here you will go through a series of exercises all targeted at making you proficient in SQL! Query information from the database with the <code>SELECT</code> statement. Try writing the query <code>SELECT * FROM person</code> below to get all of the data from the <code>person</code> table</div>,
@@ -43,6 +84,7 @@ export const levelText = {
     12: <div>Often when you query for data using aggregates: <code>SUM</code><code>AVG</code><code>MIN</code> etc. you might also want to do it in groups. Instead of finding the age sum for all people named Sam, you might want to do it for every name at once. You can use... you guessed it <code>GROUP BY</code>! Let's take a look at the billing table because I asked myself what is the most riveting thing I could imagine and I came up with billing. To come up with the total amount of hours worked per product you could write <code>SELECT product, SUM(hours) AS total_hours FROM billing GROUP BY product</code>. Below find the total amount of hours worked per role.</div>,
     13: <div>Below find the amount of employees per role</div>,
     14: <div>Below find the amount of employees per product</div>,
+    15: <div>Until now you've only selected data from one table, however in the "real world" you will often find yourself looking for information spanning multiple tables. This is a good thing! This helps us minimize the duplication of data, grow and scale tables independently, enjoy performance benefits, and many more! Suffice to say you are going to need to know how to gather data from more than one table, but lucky for you you came to the right place! Notice the two tables on the right, One of the most common type of joins is the <code>INNER JOIN</code>       </div>,
 
 };
 
@@ -61,6 +103,8 @@ export const queries = {
     12: {databaseSetup: createBillingTable + insertIntoBilling(10,"Engineer","Video Stream", 35) + insertIntoBilling(11,"Engineer","Video Stream", 33) + insertIntoBilling(12,"Engineer","Video Stream", 40) + insertIntoBilling(13,"Product Manager","Video Stream", 45) + insertIntoBilling(14,"Designer","Video Stream", 40) + insertIntoBilling(15,"Engineer","Call Recorder", 29) + insertIntoBilling(16,"Engineer","Call Recorder", 40) + insertIntoBilling(17,"Product Manager","Call Recorder", 40), answer: "SELECT role, SUM(hours) AS total_hours FROM billing GROUP BY role"},
     13: {databaseSetup: createBillingTable + insertIntoBilling(10,"Engineer","Video Stream", 35) + insertIntoBilling(11,"Engineer","Video Stream", 33) + insertIntoBilling(12,"Engineer","Video Stream", 40) + insertIntoBilling(13,"Product Manager","Video Stream", 45) + insertIntoBilling(14,"Designer","Video Stream", 40) + insertIntoBilling(15,"Engineer","Call Recorder", 29) + insertIntoBilling(16,"Engineer","Call Recorder", 40) + insertIntoBilling(17,"Product Manager","Call Recorder", 40), answer: "SELECT role, COUNT(role) AS employee_count FROM billing GROUP BY role"},
     14: {databaseSetup: createBillingTable + insertIntoBilling(10,"Engineer","Video Stream", 35) + insertIntoBilling(11,"Engineer","Video Stream", 33) + insertIntoBilling(12,"Engineer","Video Stream", 40) + insertIntoBilling(13,"Product Manager","Video Stream", 45) + insertIntoBilling(14,"Designer","Video Stream", 40) + insertIntoBilling(15,"Engineer","Call Recorder", 29) + insertIntoBilling(16,"Engineer","Call Recorder", 40) + insertIntoBilling(17,"Product Manager","Call Recorder", 40), answer: "SELECT product, COUNT(product) as employee_count FROM billing GROUP BY product"},
+    15: {databaseSetup: createNormalizedBillingTable + createProductTable + createEmployeeTable + insertIntoEmployee("Manuel", "Engineer", 32) + insertIntoProduct("Video Stream", 12430000)+ insertIntoNormalizedBilling(1,1 , 35) + insertIntoEmployee("Lin","Engineer", 21) + insertIntoNormalizedBilling(2, 1, 33) + insertIntoEmployee("Serge","Engineer", 45) + insertIntoProduct("Doom", 1666000) + insertIntoNormalizedBilling(3,2, 40) + insertIntoEmployee("Devin","Product Manager", 32) + insertIntoNormalizedBilling(4, 1, 45) + insertIntoEmployee("Sam","Designer", 30) + insertIntoNormalizedBilling(5, 1, 40) + insertIntoNormalizedBilling(1,1, 29) + insertIntoNormalizedBilling(2,2, 40) + insertIntoNormalizedBilling(4,2, 40), answer: "Select * from billing"},
+    // 15: {databaseSetup: createNormalizedBillingTable + createProductTable + createEmployeeTable + insertIntoNormalizedBilling(4,2, 40) + insertIntoEmployee("Manuel", "Engineer", 32)+insertIntoProduct("Video Stream", 12430000), answer: "Select * from billing"},
 
 };
 

@@ -32,15 +32,31 @@ class App extends Component {
     }
 
     formatColumns(columns){
-        return columns.map(column => {
-                return {Header: capitalize(column), accessor: column}
-            });
+        let formattedColumns = [];
+
+        columns.forEach((column) => {
+           const duplication = formattedColumns.some(formattedColumn => {
+               return Object.values(formattedColumn).includes(column)
+           });
+
+            if (duplication) {
+                formattedColumns.push({Header: capitalize(column), accessor: column + 1});
+            } else {
+                formattedColumns.push({Header: capitalize(column), accessor: column});
+            }
+        });
+
+        return formattedColumns;
     }
 
     formatValues(columns, values){
         return values.map((valueSet) => {
             return valueSet.reduce((acc, value, index) => {
-                acc[columns[index]] = value;
+                if (acc.hasOwnProperty(columns[index])) {
+                    acc[columns[index] + 1] = value;
+                } else {
+                    acc[columns[index]] = value;
+                }
                 return acc;
             }, {})
         });
