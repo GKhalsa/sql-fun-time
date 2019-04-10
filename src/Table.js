@@ -2,7 +2,8 @@ import React from 'react';
 import ReactTable from "react-table";
 import './Table.css'
 
-export const Table = ({header, values, columns}) => (
+export const Table = ({header, values, columns}) => {
+    return (
 
     <div className="table__container">
         <div className="table__header">{header}</div>
@@ -18,5 +19,7 @@ export const Table = ({header, values, columns}) => (
             }}
         />
     </div>
+        )
 
-);
+
+};

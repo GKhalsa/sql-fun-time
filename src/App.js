@@ -76,15 +76,17 @@ class App extends Component {
         const tables = this.db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';")[0].values;
         const tablesWithValues = tables.reduce((acc,table) => {
             const {columns, values} = this.db.exec(`SELECT * from ${table}`)[0];
+            const columnsWithoutPeriods = columns.map(column => column.replace(/\./g,'-'));
             acc[table] = {
-                columns: this.formatColumns(columns),
-                values: this.formatValues(columns, values)
+                columns: this.formatColumns(columnsWithoutPeriods),
+                values: this.formatValues(columnsWithoutPeriods, values)
             };
             return acc
         }, {});
 
         const {columns, values} = this.db.exec(queries[level].answer)[0];
-        this.setState({tablesWithValues, levelText: levelText[level], expectedValues: this.formatValues(columns, values), expectedColumns: this.formatColumns(columns)})
+        const columnsWithoutPeriods = columns.map(column => column.replace(/\./g,'-'));
+        this.setState({dropDownOpen:false,tablesWithValues, levelText: levelText[level], expectedValues: this.formatValues(columnsWithoutPeriods, values), expectedColumns: this.formatColumns(columnsWithoutPeriods)})
     };
 
     componentDidUpdate(_,prevState) {
@@ -131,8 +133,9 @@ class App extends Component {
         if (res.length !== 0) {
 
             const {columns, values} = res[0];
-            const queryColumns = this.formatColumns(columns);
-            const queryValues = this.formatValues(columns,values);
+            const columnsWithoutPeriods = columns.map(column => column.replace(/\./g,'-'));
+            const queryColumns = this.formatColumns(columnsWithoutPeriods);
+            const queryValues = this.formatValues(columnsWithoutPeriods,values);
 
 
             const isMatch = checkForMatch(queryColumns, queryValues, expectedColumns, expectedValues);
