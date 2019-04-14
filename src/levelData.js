@@ -46,8 +46,71 @@ const createPersonTable =
                 age INT NOT NULL
               );`;
 
+const createMonthTable =
+    `CREATE TABLE IF NOT EXISTS
+              month(
+                id INTEGER PRIMARY KEY,
+                name VARCHAR(128) NOT NULL,
+                revenue_id INT
+              );`;
+
+const createRevenueTable =
+    `CREATE TABLE IF NOT EXISTS
+              revenue(
+                id INTEGER PRIMARY KEY,
+                amount INT NOT NULL
+              );`;
+
+const createMovieTable =
+    `CREATE TABLE IF NOT EXISTS
+              movie(
+                id INTEGER PRIMARY KEY,
+                title_id INT NOT NULL,
+                box_office_id INT NOT NULL,
+                cast_id INT NOT NULL
+                
+              );`;
+
+const insertIntoMovie = (title_id, box_office_id, cast_id) => (
+    `INSERT into movie (title_id, box_office_id, cast_id) values (${title_id}, ${box_office_id}, ${cast_id});`
+);
 
 
+const createTitleTable =
+    `CREATE TABLE IF NOT EXISTS
+              title(
+                id INTEGER PRIMARY KEY,
+                name VARCHAR(128) NOT NULL
+              );`;
+
+const insertIntoTitle = (name) => (
+    `INSERT into title (name) values ('${name}');`
+);
+
+const createBoxOfficeTable =
+    `CREATE TABLE IF NOT EXISTS
+              box_office(
+                id INTEGER PRIMARY KEY,
+                imdb REAL NOT NULL,
+                budget INT NOT NULL,
+                domestic_gross INT NOT NULL,
+                foreign_gross INT NOT NULL
+              );`;
+
+const insertIntoBoxOffice = (imdb, budget, domestic_gross, foreign_gross) => (
+    `INSERT into box_office (imdb, budget, domestic_gross, foreign_gross) values (${imdb}, ${budget}, ${domestic_gross}, ${foreign_gross});`
+);
+
+const createCastTable =
+    `CREATE TABLE IF NOT EXISTS
+              cast(
+                id INTEGER PRIMARY KEY,
+                name VARCHAR(128) NOT NULL
+              );`;
+
+const insertIntoCast = (name) => (
+    `INSERT into cast (name) values ('${name}');`
+);
 
 const insertIntoPerson = (name, age) => (
     `INSERT into person (name, age) values ('${name}', ${age});`
@@ -69,6 +132,64 @@ const insertIntoProduct = (name, revenue) => (
     `INSERT into product (name, revenue) values ('${name}',${revenue});`
 );
 
+const insertIntoMonth = (name, revenue_id) => (
+    `INSERT into month (name, revenue_id) values ('${name}',${revenue_id});`
+);
+
+const insertIntoRevenue = (amount) => (
+    `INSERT into revenue (amount) values (${amount});`
+);
+
+const insertIntoCastGen = () => {
+    const cast = [
+        "viggo martensen",
+        "mahershala ali",
+        "linda cardellini",
+        "sally hawkins",
+        "doug jones",
+        "michael shannon",
+        "octavia spencer",
+        "trevante rhodes",
+        "janelle monae",
+        "naomie harris",
+        "mark ruffalo",
+        "rachel mcadams",
+        "michael keaton",
+        "liv schreiber",
+        "emma stone",
+        "edward norton",
+        "naomi watts",
+        "chiwetel ejiofor",
+        "michael fassbender",
+        "lupita nyongo",
+        "brad pitt",
+        "ben affleck",
+        "bryan cranston",
+        "john goodman",
+        "alan arkin",
+        "clea duvall",
+        "jean dujardin",
+        "berenice bejo",
+        "penelope ann miller",
+        ]
+    return cast.map(name => insertIntoCast(name)).join("");
+}
+
+const insertIntoTitleGen = () => {
+    const titles = [
+        "green book",
+        "the shape of water",
+        "moonlight",
+        "spotlight",
+        "birdman",
+        "12 years a slave",
+        "argo",
+        "the artist",
+    ]
+
+    return titles.map(title => insertIntoTitle(title)).join("")
+}
+
 export const levelText = {
     1: <div>Hello and welcome to SQL fun time! Here you will go through a series of exercises all targeted at making you proficient in SQL! Query information from the database with the <code>SELECT</code> statement. Try writing the query <code>SELECT * FROM person</code> below to get all of the data from the <code>person</code> table</div>,
     2: <div>Congratulations! You just queried for the first time on SQL fun time! Let's break down what you just did. <code>SELECT *</code> selects every column of data or rather <code>*</code> specifies that we want all of the columns. This is a powerful way to quickly inspect all of the data. <code>FROM person</code> tells us that we want this data from the <code>person</code> table. Instead of querying for every column, let's say that you are only interested in the columns <code>name</code> and <code>age</code>. That could be expressed as <code>SELECT name, age FROM person</code>. Below select the column age from the person table</div>,
@@ -88,6 +209,8 @@ export const levelText = {
     16: <div>Find the employee name & age, and billing hour data for any employee that is over the age of 21 and worked more than 40 hours</div>,
     17: <div>Find the total amount of hours worked per employee.</div>,
     18: <div>When gathering data you may seek information from more than two tables. The syntax is largely similar when joining one table to another. You need to join one table to another to another. Get the employee name, product name, and billing hours for every row in billing. Try it a couple times before looking at the answer. I believe in you! </div>,
+    19: <div>The <code>INNER JOIN</code> is great at combining information that is present, however what happens when some values are missing? Take a guess at what this query returns: <code>SELECT month.name, revenue.amount FROM month INNER JOIN revenue ON month.revenue_id = revenue.id;</code>. If you guessed that it will only return the months that have revenue_id's then you are correct! However what if we wanted to return back all of the months and if they had associated revenue great, but if not we still want to see the month. The solution to that is the <code>LEFT JOIN</code>. The syntax is nearly identical to that of the <code>INNER JOIN</code>. Try it out before looking at the answer! </div>,
+    20: <div>test </div>,
 
 };
 
@@ -110,7 +233,20 @@ export const queries = {
     16: {databaseSetup: createNormalizedBillingTable + createProductTable + createEmployeeTable + insertIntoEmployee("Manuel", "Engineer", 32) + insertIntoProduct("Video Stream", 12430000)+ insertIntoNormalizedBilling(1,1 , 35) + insertIntoEmployee("Lin","Engineer", 21) + insertIntoNormalizedBilling(2, 1, 33) + insertIntoEmployee("Serge","Engineer", 45) + insertIntoProduct("Doom", 1666000) + insertIntoNormalizedBilling(3,2, 40) + insertIntoEmployee("Devin","Product Manager", 32) + insertIntoNormalizedBilling(4, 1, 45) + insertIntoEmployee("Sam","Designer", 30) + insertIntoNormalizedBilling(5, 1, 40) + insertIntoNormalizedBilling(1,1, 29) + insertIntoNormalizedBilling(2,2, 40) + insertIntoNormalizedBilling(4,2, 40), answer: "SELECT employee.name, employee.age, billing.hours FROM employee INNER JOIN billing ON billing.employee_id = employee.id WHERE employee.age > 21 AND billing.hours > 40"},
     17: {databaseSetup: createNormalizedBillingTable + createProductTable + createEmployeeTable + insertIntoEmployee("Manuel", "Engineer", 32) + insertIntoProduct("Video Stream", 12430000)+ insertIntoNormalizedBilling(1,1 , 35) + insertIntoEmployee("Lin","Engineer", 21) + insertIntoNormalizedBilling(2, 1, 33) + insertIntoEmployee("Serge","Engineer", 45) + insertIntoProduct("Doom", 1666000) + insertIntoNormalizedBilling(3,2, 40) + insertIntoEmployee("Devin","Product Manager", 32) + insertIntoNormalizedBilling(4, 1, 45) + insertIntoEmployee("Sam","Designer", 30) + insertIntoNormalizedBilling(5, 1, 40) + insertIntoNormalizedBilling(1,1, 29) + insertIntoNormalizedBilling(2,2, 40) + insertIntoNormalizedBilling(4,2, 40), answer: "select employee.name AS employee_name, SUM(billing.hours) AS billable_hours FROM employee INNER JOIN billing ON billing.employee_id = employee.id GROUP BY employee.name;"},
     18: {databaseSetup: createNormalizedBillingTable + createProductTable + createEmployeeTable + insertIntoEmployee("Manuel", "Engineer", 32) + insertIntoProduct("Video Stream", 12430000)+ insertIntoNormalizedBilling(1,1 , 35) + insertIntoEmployee("Lin","Engineer", 21) + insertIntoNormalizedBilling(2, 1, 33) + insertIntoEmployee("Serge","Engineer", 45) + insertIntoProduct("Doom", 1666000) + insertIntoNormalizedBilling(3,2, 40) + insertIntoEmployee("Devin","Product Manager", 32) + insertIntoNormalizedBilling(4, 1, 45) + insertIntoEmployee("Sam","Designer", 30) + insertIntoNormalizedBilling(5, 1, 40) + insertIntoNormalizedBilling(1,1, 29) + insertIntoNormalizedBilling(2,2, 40) + insertIntoNormalizedBilling(4,2, 40), answer: "SELECT employee.name AS employee_name, product.name AS product_name, billing.hours FROM product INNER JOIN billing ON product.id = billing.product_id INNER JOIN employee ON employee.id = billing.employee_id;"},
+    19: {databaseSetup: createMonthTable + createRevenueTable + insertIntoRevenue(100) + insertIntoRevenue(200) + insertIntoRevenue(300) + insertIntoMonth("January", 1) + insertIntoMonth("February", null) + insertIntoMonth("March", 2) +insertIntoMonth("April", 2) +insertIntoMonth("May", 3) + insertIntoMonth("June", null), answer: "SELECT month.name, revenue.amount FROM month LEFT JOIN revenue ON month.revenue_id = revenue.id;"},
+    20: {databaseSetup: createMovieTable + createTitleTable + createBoxOfficeTable + createCastTable +
+                        insertIntoTitleGen() + insertIntoCastGen() +
+                        insertIntoBoxOffice(8.3,23000000, 84780771,224116275) + insertIntoBoxOffice(7.3, 20000000, 63859435, 131384029) +
+                        insertIntoBoxOffice(7.4, 4000000, 27854932, 37191755) + insertIntoBoxOffice(8.1, 20000000, 45055776, 53219462) +
+                        insertIntoBoxOffice(7.7, 18000000, 42340598, 60874496) + insertIntoBoxOffice(8.1, 20000000, 56671993, 131061209) +
+                        insertIntoBoxOffice(7.7, 44500000, 136025503, 96300000) +  insertIntoBoxOffice(7.9, 15000000, 44671682, 88761174) +
+                        insertIntoMovie(1,1,1) +insertIntoMovie(1,1,2) + insertIntoMovie(1,1,3) +
+                        insertIntoMovie(2,2,4) + insertIntoMovie(2,2,5) + insertIntoMovie(2,2,6) + insertIntoMovie(2,2,7) +
+                        insertIntoMovie(3,3,2) + insertIntoMovie(3,3,8) + insertIntoMovie(3,3,9) + insertIntoMovie(3,3,10) +
+                        insertIntoMovie(4,4,11) + insertIntoMovie(4,4,12) + insertIntoMovie(4,4,13) + insertIntoMovie(4,4,14) +
+                        insertIntoMovie(5,5,13) + insertIntoMovie(5,5,15) + insertIntoMovie(5,5,16) + insertIntoMovie(5,5,17) +
+                        insertIntoMovie(6,6,18) + insertIntoMovie(6,6,19) + insertIntoMovie(6,6,20) + insertIntoMovie(6,6,21) +
+                        insertIntoMovie(7,7,22) + insertIntoMovie(7,7,23) + insertIntoMovie(7,7,24) + insertIntoMovie(7,7,25) + insertIntoMovie(7,7,26) +
+                        insertIntoMovie(8,8,27) + insertIntoMovie(8,8,28) + insertIntoMovie(8,8,29) + insertIntoMovie(8,8,24), answer: "SELECT * from movie"},
 
 };
-
-
