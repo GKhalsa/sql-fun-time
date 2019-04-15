@@ -247,6 +247,6 @@ export const queries = {
                         insertIntoMovie(5,5,13) + insertIntoMovie(5,5,15) + insertIntoMovie(5,5,16) + insertIntoMovie(5,5,17) +
                         insertIntoMovie(6,6,18) + insertIntoMovie(6,6,19) + insertIntoMovie(6,6,20) + insertIntoMovie(6,6,21) +
                         insertIntoMovie(7,7,22) + insertIntoMovie(7,7,23) + insertIntoMovie(7,7,24) + insertIntoMovie(7,7,25) + insertIntoMovie(7,7,26) +
-                        insertIntoMovie(8,8,27) + insertIntoMovie(8,8,28) + insertIntoMovie(8,8,29) + insertIntoMovie(8,8,24), answer: "SELECT * from movie"},
+                        insertIntoMovie(8,8,27) + insertIntoMovie(8,8,28) + insertIntoMovie(8,8,29) + insertIntoMovie(8,8,24), answer: "SELECT * from movie", size: 29}
 
 };

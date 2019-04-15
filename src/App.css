@@ -13,6 +13,7 @@
   display: flex;
 }
 
+
 body {
   background-color: #F1ECE4;
 }
@@ -31,10 +32,36 @@ body {
   overflow: scroll;
 }
 
-/*#blah2{*/
-  /*margin: 2em;*/
-  /*box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 78px rgba(82, 168, 236, 0.6);*/
-/*}*/
+#blah2{
+  height: 25vh !important;
+  width: 45vw !important;
+}
+
+@media screen and (max-width: 1100px) {
+  .App__main {
+    display: flex;
+    flex-direction: column;
+  }
+  .App__left {
+    width: 100vw;
+    height: inherit;
+  }
+
+  .App__right {
+    width: 100vw;
+    height: 90vh;
+  }
+
+  #blah2{
+    width: 65vw !important;
+  }
+}
+
+.ace__editor__wrapper{
+  display: flex;
+  justify-content: center;
+}
+
 
 .left__level__text {
   text-align: left;
@@ -144,11 +171,17 @@ i {
 
 button:focus {outline:0;}
 
+.button__group__wrapper {
+  display: flex;
+  justify-content: center;
+}
+
 .button__group {
   display:flex;
   justify-content: space-between;
   margin-left:3em;
-  margin-right:6em;
+  margin-right:3em;
+  padding-bottom: 2em;
 }
 
 code {

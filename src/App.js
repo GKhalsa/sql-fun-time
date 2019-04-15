@@ -202,12 +202,15 @@ class App extends Component {
                             {levelText[level]}
                         </div>
 
+                        <div className="ace__editor__wrapper">
                             <AceEditor
-                                height="13em"
-                                width="45em"
+                                // className="ace__editor"
+                                // height="13em"
+                                // width="45em"
+                                name="blah2"
                                 mode="mysql"
                                 theme="monokai"
-                                style={{margin: '2em',animation: `${submitGlow} 1s 2 alternate`}}
+                                style={{margin: '2em', animation: `${submitGlow} 1s 2 alternate`}}
                                 onChange={(sqlValue) => this.setState({sqlValue})}
                                 fontSize={16}
                                 showPrintMargin={true}
@@ -222,6 +225,7 @@ class App extends Component {
                                     tabSize: 2,
                                     wrap: true,
                                 }}/>
+                        </div>
                         <div>
                             {error}
                         </div>
@@ -241,7 +245,7 @@ class App extends Component {
                             {
                                 Object.keys(tablesWithValues).map(table => {
                                     const {columns, values} = tablesWithValues[table];
-                                    return <Table header={table} values={values} columns={columns}/>
+                                    return <Table header={table} values={values} columns={columns} size={queries[level].size}/>
                                 })
                             }
 
