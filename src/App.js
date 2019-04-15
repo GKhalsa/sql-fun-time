@@ -208,7 +208,7 @@ class App extends Component {
                                                 </div>
 
                                                 <div className="drop__box__button__wrapper dropdown">
-                                                    <button onClick={() => this.reset()} className="clear__button dropdown">clear</button>
+                                                    <button onClick={() => this.reset()} className="clear__button dropdown">reset</button>
                                                 </div>
 
                                             </div>
