@@ -161,6 +161,11 @@ class App extends Component {
         }
     };
 
+    reset = () => {
+        localStorage.removeItem('sqlState');
+        this.setState({level:1, completedLevels:[]})
+    }
+
     render() {
         const {queryValues, queryColumns, expectedColumns, expectedValues, tablesWithValues, level, completedLevels, submitGlow, error} = this.state;
         return (
@@ -191,13 +196,21 @@ class App extends Component {
                                             </div>
 
                                             <div className="level__drop__box dropdown">
-                                                {
-                                                    Object.keys(levelText).map((levelNum) => {
-                                                        return (
-                                                            <div onClick={() => this.setState({level: parseInt(levelNum)})} className={`level__option dropdown ${completedLevels.some(completedLevel => completedLevel == levelNum.toString()) ? "level__complete":""} ${levelNum == level ? "current__level__option":""}`}>{levelNum}</div>
-                                                        )
-                                                    })
-                                                }
+
+                                                <div className="drop__box__levels dropdown">
+                                                    {
+                                                        Object.keys(levelText).map((levelNum) => {
+                                                            return (
+                                                                <div onClick={() => this.setState({level: parseInt(levelNum)})} className={`level__option dropdown ${completedLevels.some(completedLevel => completedLevel == levelNum.toString()) ? "level__complete":""} ${levelNum == level ? "current__level__option":""}`}>{levelNum}</div>
+                                                            )
+                                                        })
+                                                    }
+                                                </div>
+
+                                                <div className="drop__box__button__wrapper dropdown">
+                                                    <button onClick={() => this.reset()} className="clear__button dropdown">clear</button>
+                                                </div>
+
                                             </div>
                                         </div>
                                         :

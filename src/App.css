@@ -110,13 +110,29 @@ i {
   z-index: 2;
   transform: translateX(-0.55em);
   box-shadow: 0 0 13px -3px #000;
-  height: 3.3em;
+  height: 4.3em;
   width: 5em;
   background-color: #7787b2;
+  display: flex;
+  flex-direction: column;
+}
+
+.drop__box__levels {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-content: flex-start;
+}
+
+.drop__box__button__wrapper {
+
+}
+
+.clear__button {
+  border-radius: 5px;
+  font-family: 'PT Sans', sans-serif;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .level__option {
