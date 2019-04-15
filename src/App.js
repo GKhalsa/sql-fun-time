@@ -242,7 +242,7 @@ class App extends Component {
                             {
                                 Object.keys(tablesWithValues).map(table => {
                                     const {columns, values} = tablesWithValues[table];
-                                    return <Table header={table} values={values} columns={columns} size={queries[level].size}/>
+                                    return <Table header={table} values={values} columns={columns}/>
                                 })
                             }
 
