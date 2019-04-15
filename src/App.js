@@ -204,10 +204,7 @@ class App extends Component {
 
                         <div className="ace__editor__wrapper">
                             <AceEditor
-                                // className="ace__editor"
-                                // height="13em"
-                                // width="45em"
-                                name="blah2"
+                                name="ace-editor"
                                 mode="mysql"
                                 theme="monokai"
                                 style={{margin: '2em', animation: `${submitGlow} 1s 2 alternate`}}

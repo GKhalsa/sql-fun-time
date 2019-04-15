@@ -32,7 +32,7 @@ body {
   overflow: scroll;
 }
 
-#blah2{
+#ace-editor{
   height: 25vh !important;
   width: 45vw !important;
 }
@@ -52,7 +52,7 @@ body {
     height: 90vh;
   }
 
-  #blah2{
+  #ace-editor{
     width: 65vw !important;
   }
 }
@@ -110,7 +110,7 @@ i {
   z-index: 2;
   transform: translateX(-0.55em);
   box-shadow: 0 0 13px -3px #000;
-  height: 6em;
+  height: 3.3em;
   width: 5em;
   background-color: #7787b2;
   display: flex;
