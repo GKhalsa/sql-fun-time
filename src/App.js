@@ -90,8 +90,11 @@ class App extends Component {
     };
 
     componentDidUpdate(_,prevState) {
-        if (prevState.level !== this.state.level) {
-            this.levelSetup(this.state.level)
+        const {level, completedLevels} = this.state;
+        if (prevState.level !== level) {
+            const stringifiedState = JSON.stringify({level,completedLevels});
+            localStorage.setItem('sqlState', stringifiedState);
+            this.levelSetup(level)
         }
     }
 
@@ -143,7 +146,13 @@ class App extends Component {
 
             if (isMatch) {
                 const addToCompletedLevels = [...completedLevels,level];
-                this.setState({queryColumns, queryValues, level: level + 1, completedLevels: addToCompletedLevels, submitGlow: getSubmitGlow, error:""})
+
+                if(level === Object.keys(queries).length){
+                    this.setState({queryColumns, queryValues, completedLevels: addToCompletedLevels, submitGlow: getSubmitGlow, error:""})
+                } else {
+                    this.setState({queryColumns, queryValues, level: level + 1, completedLevels: addToCompletedLevels, submitGlow: getSubmitGlow, error:""})
+                }
+
             } else {
                 this.setState({queryColumns, queryValues, submitGlow:getSubmitGlow, error:""});
             }
