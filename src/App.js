@@ -4,6 +4,7 @@ import sql from 'sql.js';
 import {levelText, queries} from './levelData'
 import {checkForMatch, capitalize, determineGlow} from './helpers'
 import {Table} from './Table'
+import octocat from './GitHub-Mark-64px.png';
 
 import './App.css';
 import 'brace/mode/mysql';
@@ -256,22 +257,46 @@ class App extends Component {
 
                     </div>
 
-                    <div className="App__right">
-                        <div className="">
+                    <div>
+                        <div className="App__right">
+                            <div className="">
 
-                            <Table header="Query Result" values={queryValues} columns={queryColumns}/>
-                            <Table header="Expected Result" values={expectedValues} columns={expectedColumns}/>
-                            {
-                                Object.keys(tablesWithValues).map(table => {
-                                    const {columns, values} = tablesWithValues[table];
-                                    return <Table header={table} values={values} columns={columns}/>
-                                })
-                            }
+                                <Table header="Query Result" values={queryValues} columns={queryColumns}/>
+                                <Table header="Expected Result" values={expectedValues} columns={expectedColumns}/>
+                                {
+                                    Object.keys(tablesWithValues).map(table => {
+                                        const {columns, values} = tablesWithValues[table];
+                                        return <Table header={table} values={values} columns={columns}/>
+                                    })
+                                }
+
+                            </div>
 
                         </div>
 
+                        <div className="right__footer">
+                            <a href="https://github.com/GKhalsa/sql-fun-time">
+                                <div className="app__footer">
+
+                                    <img className="octocat" src={octocat} alt=""/>
+
+                                </div>
+                            </a>
+
+
+                            <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/O4WXsaUI8">
+                                <img className="cookie__image" src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Buy me a coffee"/>
+                                <span style={{marginLeft:"5px"}}>Buy me a coffee</span>
+                            </a>
+
+                        </div>
+
+
                     </div>
+
                 </div>
+
+
 
             </div>
         );
