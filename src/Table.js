@@ -2,8 +2,8 @@ import React, {memo} from 'react';
 import ReactTable from "react-table";
 import './Table.css'
 
-export const Table = memo(({header, values, columns}) => (
-    <div className="table__container">
+export const Table = memo(({header, values, columns, animation}) => (
+    <div className={`table__container ${animation}`}>
         <div className="table__header">{header}</div>
         <ReactTable
             data={values}

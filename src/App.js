@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import AceEditor from 'react-ace';
 import sql from 'sql.js';
 import {levelText, queries} from './levelData'
-import {checkForMatch, capitalize, determineGlow} from './helpers'
+import {checkForMatch, determineGlow, formatValues, formatColumns} from './helpers'
 import {Table} from './Table'
 import octocat from './GitHub-Mark-64px.png';
+import twitterLogo from './twitter-logo.png'
 
 import './App.css';
 import 'brace/mode/mysql';
@@ -16,7 +17,7 @@ class App extends Component {
     constructor(props){
         super(props);
         this.state = {
-            sqlValue: ``,
+            sqlValue: '',
             queryValues: [],
             queryColumns: [],
             dropDownOpen: false,
@@ -27,40 +28,10 @@ class App extends Component {
             expectedColumns:[],
             expectedValues: [],
             submitGlow:"",
-            error: ""
+            error: "",
+            slideAnimation: ""
         };
         this.db = new sql.Database();
-    }
-
-    formatColumns(columns){
-        let formattedColumns = [];
-
-        columns.forEach((column) => {
-           const duplication = formattedColumns.some(formattedColumn => {
-               return Object.values(formattedColumn).includes(column)
-           });
-
-            if (duplication) {
-                formattedColumns.push({Header: capitalize(column), accessor: column + 1});
-            } else {
-                formattedColumns.push({Header: capitalize(column), accessor: column});
-            }
-        });
-
-        return formattedColumns;
-    }
-
-    formatValues(columns, values){
-        return values.map((valueSet) => {
-            return valueSet.reduce((acc, value, index) => {
-                if (acc.hasOwnProperty(columns[index])) {
-                    acc[columns[index] + 1] = value;
-                } else {
-                    acc[columns[index]] = value;
-                }
-                return acc;
-            }, {})
-        });
     }
 
     clear = () => {
@@ -71,7 +42,7 @@ class App extends Component {
         this.setState({queryValues:[], queryColumns:[], tablesWithValues:{}, sqlValue:""})
     };
 
-    levelSetup = (level) => {
+    levelSetup = (level, slideAnimation) => {
         this.clear();
         this.db.run(queries[level].databaseSetup);
         const tables = this.db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';")[0].values;
@@ -79,15 +50,15 @@ class App extends Component {
             const {columns, values} = this.db.exec(`SELECT * from ${table}`)[0];
             const columnsWithoutPeriods = columns.map(column => column.replace(/\./g,'-'));
             acc[table] = {
-                columns: this.formatColumns(columnsWithoutPeriods),
-                values: this.formatValues(columnsWithoutPeriods, values)
+                columns: formatColumns(columnsWithoutPeriods),
+                values: formatValues(columnsWithoutPeriods, values)
             };
             return acc
         }, {});
 
         const {columns, values} = this.db.exec(queries[level].answer)[0];
         const columnsWithoutPeriods = columns.map(column => column.replace(/\./g,'-'));
-        this.setState({dropDownOpen:false,tablesWithValues, levelText: levelText[level], expectedValues: this.formatValues(columnsWithoutPeriods, values), expectedColumns: this.formatColumns(columnsWithoutPeriods)})
+        this.setState({dropDownOpen:false, tablesWithValues, levelText: levelText[level], expectedValues: formatValues(columnsWithoutPeriods, values), expectedColumns: formatColumns(columnsWithoutPeriods), slideAnimation })
     };
 
     componentDidUpdate(_,prevState) {
@@ -95,7 +66,8 @@ class App extends Component {
         if (prevState.level !== level) {
             const stringifiedState = JSON.stringify({level,completedLevels});
             localStorage.setItem('sqlState', stringifiedState);
-            this.levelSetup(level)
+            const slideAnimation = prevState.slideAnimation !== this.state.slideAnimation ? this.state.slideAnimation : "";
+            this.levelSetup(level, slideAnimation)
         }
     }
 
@@ -138,12 +110,13 @@ class App extends Component {
 
             const {columns, values} = res[0];
             const columnsWithoutPeriods = columns.map(column => column.replace(/\./g,'-'));
-            const queryColumns = this.formatColumns(columnsWithoutPeriods);
-            const queryValues = this.formatValues(columnsWithoutPeriods,values);
+            const queryColumns = formatColumns(columnsWithoutPeriods);
+            const queryValues = formatValues(columnsWithoutPeriods,values);
 
 
             const isMatch = checkForMatch(queryColumns, queryValues, expectedColumns, expectedValues);
             const getSubmitGlow = determineGlow(isMatch,submitGlow);
+            const getSlideAnimation = this.determineSlideAnimation();
 
             if (isMatch) {
                 const addToCompletedLevels = [...completedLevels,level];
@@ -151,7 +124,7 @@ class App extends Component {
                 if(level === Object.keys(queries).length){
                     this.setState({queryColumns, queryValues, completedLevels: addToCompletedLevels, submitGlow: getSubmitGlow, error:""})
                 } else {
-                    this.setState({queryColumns, queryValues, level: level + 1, completedLevels: addToCompletedLevels, submitGlow: getSubmitGlow, error:""})
+                    this.setState({queryColumns, queryValues, level: level + 1, completedLevels: addToCompletedLevels, submitGlow: getSubmitGlow, slideAnimation: getSlideAnimation, error:""})
                 }
 
             } else {
@@ -162,13 +135,18 @@ class App extends Component {
         }
     };
 
+    determineSlideAnimation = () => {
+        const {slideAnimation} = this.state;
+        return slideAnimation === "slide-out1" ? "slide-out2" : "slide-out1";
+    }
+
     reset = () => {
         localStorage.removeItem('sqlState');
         this.setState({level:1, completedLevels:[]})
     }
 
     render() {
-        const {queryValues, queryColumns, expectedColumns, expectedValues, tablesWithValues, level, completedLevels, submitGlow, error} = this.state;
+        const {queryValues, queryColumns, expectedColumns, expectedValues, tablesWithValues, level, completedLevels, submitGlow,slideAnimation, error} = this.state;
         return (
             <div className="App">
 
@@ -261,12 +239,12 @@ class App extends Component {
                         <div className="App__right">
                             <div className="">
 
-                                <Table header="Query Result" values={queryValues} columns={queryColumns}/>
-                                <Table header="Expected Result" values={expectedValues} columns={expectedColumns}/>
+                                <Table animation={slideAnimation} header="Query Result" values={queryValues} columns={queryColumns}/>
+                                <Table animation={slideAnimation} header="Expected Result" values={expectedValues} columns={expectedColumns}/>
                                 {
                                     Object.keys(tablesWithValues).map(table => {
                                         const {columns, values} = tablesWithValues[table];
-                                        return <Table header={table} values={values} columns={columns}/>
+                                        return <Table animation={slideAnimation} header={table} values={values} columns={columns}/>
                                     })
                                 }
 
@@ -275,7 +253,7 @@ class App extends Component {
                         </div>
 
                         <div className="right__footer">
-                            <a href="https://github.com/GKhalsa/sql-fun-time">
+                            <a target="_blank" href="https://github.com/GKhalsa/sql-fun-time">
                                 <div className="app__footer">
 
                                     <img className="octocat" src={octocat} alt=""/>
@@ -283,6 +261,9 @@ class App extends Component {
                                 </div>
                             </a>
 
+                            <a target="_blank" href="https://twitter.com/listartiste">
+                                <img className="twitter__logo" src={twitterLogo} alt="twitter"/>
+                            </a>
 
                             <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/O4WXsaUI8">
                                 <img className="cookie__image" src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Buy me a coffee"/>

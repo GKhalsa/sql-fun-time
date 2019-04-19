@@ -20,12 +20,12 @@ body {
 
 .App__left {
   width: 50vw;
-  height: 50vw;
+  height: 88vh;
 }
 
 .App__right {
   width: 50vw;
-  height: 50vw;
+  height: 88vh;
   border-radius: 10px;
   background-color: #7787b2;
   box-shadow: 0 0 13px -3px #000;
@@ -181,7 +181,8 @@ i {
   box-shadow: 0 0 13px -3px #000;
   cursor: pointer;
   font-family: 'Coiny', cursive;
-  line-height: 2em;
+  line-height: 1em;
+  height: 4em;
   font-size: 1em;
 }
 
@@ -229,6 +230,13 @@ code {
 }
 
 .octocat {
+  height: 2.5em;
+  cursor: pointer;
+  padding-right: 2em;
+  padding-left: 2em;
+}
+
+.twitter__logo{
   height: 3em;
   cursor: pointer;
   padding-right: 2em;

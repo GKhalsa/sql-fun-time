@@ -228,9 +228,33 @@ export const levelText = {
     18: <div>When gathering data you may seek information from more than two tables. The syntax is largely similar when joining one table to another. You need to join one table to another to another. Get the employee name, product name, and billing hours for every row in billing. Try it a couple times before looking at the answer. I believe in you! </div>,
     19: <div>The <code>INNER JOIN</code> is great at combining information that is present, however what happens when some values are missing? Take a guess at what this query returns: <code>SELECT month.name, revenue.amount FROM month INNER JOIN revenue ON month.revenue_id = revenue.id;</code>. If you guessed that it will only return the months that have revenue_id's then you are correct! However what if we wanted to return back all of the months and if they had associated revenue great, but if not we still want to see the month. The solution to that is the <code>LEFT JOIN</code>. The syntax is nearly identical to that of the <code>INNER JOIN</code>. Try it out before looking at the answer! </div>,
     20: <div>Congratulations on making it so far!! I've put together some data around the last 8 movies that won an oscar along with a few challenges that will take everything you've learned and put it to the test! For the first challenge find the movie where the domestic box office gross is larger than the foreign gross.  </div>,
-    21: <div>Now for your final challenge, find all the actors that have been in more than one oscar winning movie</div>,
+    21: <div>Now for your final challenge, find all the actors that have been in more than one movie</div>,
 
 };
+
+export const levels = {
+    1: "SELECT pt.1",
+    2: "SELECT pt.2",
+    3: "SELECT pt.3",
+    4: "WHERE pt.1",
+    5: "WHERE pt.2",
+    6: "WHERE pt.3",
+    7: "LIKE",
+    8: "AGGREGATE pt.1",
+    9: "AGGREGATE pt.2",
+    10: "AGGREGATE pt.3",
+    11: "ORDER BY",
+    12: "GROUP BY pt.1",
+    13: "GROUP BY pt.2",
+    14: "GROUP BY pt.3",
+    15: "INNER JOIN pt.1",
+    16: "INNER JOIN pt.2",
+    17: "INNER JOIN pt.3",
+    18: "MULTIPLE TABLES",
+    19: "LEFT JOIN",
+    20: "CHALLENGE LEVEL 1",
+    21: "CHALLENGE LEVEL 2"
+}
 
 export const queries = {
     1: {databaseSetup: createPersonTable + insertIntoPerson('Devin',26) + insertIntoPerson('Asem',12) , answer: "SELECT * FROM person;"},

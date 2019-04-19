@@ -45,7 +45,7 @@ export const capitalize = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-export const determineGlow =(isMatch, currentGlow) => {
+export const determineGlow = (isMatch, currentGlow) => {
     if (!isMatch) {
         if (currentGlow == "" || currentGlow == "correct1" || currentGlow == "correct2") {
             return "incorrect1"
@@ -63,4 +63,35 @@ export const determineGlow =(isMatch, currentGlow) => {
             return "correct1"
         }
     }
+}
+
+export const formatColumns = (columns) => {
+    let formattedColumns = [];
+
+    columns.forEach((column) => {
+        const duplication = formattedColumns.some(formattedColumn => {
+            return Object.values(formattedColumn).includes(column)
+        });
+
+        if (duplication) {
+            formattedColumns.push({Header: capitalize(column), accessor: column + 1});
+        } else {
+            formattedColumns.push({Header: capitalize(column), accessor: column});
+        }
+    });
+
+    return formattedColumns;
+}
+
+export const formatValues = (columns, values) => {
+    return values.map((valueSet) => {
+        return valueSet.reduce((acc, value, index) => {
+            if (acc.hasOwnProperty(columns[index])) {
+                acc[columns[index] + 1] = value;
+            } else {
+                acc[columns[index]] = value;
+            }
+            return acc;
+        }, {})
+    });
 }
