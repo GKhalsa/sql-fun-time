@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import AceEditor from 'react-ace';
 import sql from 'sql.js';
 import {levelText, queries, levels} from './levelData'
-import {checkForMatch, capitalize, determineGlow, formatValues, formatColumns} from './helpers'
+import {checkForMatch, determineGlow, formatValues, formatColumns} from './helpers'
 import {Table} from './Table'
 import octocat from './GitHub-Mark-64px.png';
 import twitterLogo from './twitter-logo.png'
@@ -85,7 +85,7 @@ class App extends Component {
     }
 
     componentWillUnmount(){
-        document.addEventListener("mousedown", this.checkForClickOutsideLevels);
+        document.removeEventListener("mousedown", this.checkForClickOutsideLevels);
     }
 
     checkForClickOutsideLevels = (e) => {
