@@ -264,3 +264,37 @@ code {
 .bmc-button:hover, .bmc-button:active, .bmc-button:focus {
   -webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;text-decoration: none !important;box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;opacity: 0.85 !important;color:#ffffff !important;
 }
+
+.slide-out1 {
+  animation: slide-out1 1s;
+  -webkit-animation: slide-out1 1s;
+}
+
+.slide-out2 {
+  animation: slide-out2 1s;
+  -webkit-animation: slide-out2 1s;
+}
+
+@keyframes slide-out1 {
+  0% { transform: translateX(0%); }
+  50% { transform: translateX(120%); }
+  100% { transform: translateX(0%); }
+}
+
+@-webkit-keyframes slide-out1 {
+  0% { -webkit-transform: translateX(0%); }
+  50% { -webkit-transform: translateX(120%); }
+  100% { -webkit-transform: translateX(0%); }
+}
+
+@keyframes slide-out2 {
+  0% { transform: translateX(0%); }
+  50% { transform: translateX(120%); }
+  100% { transform: translateX(0%); }
+}
+
+@-webkit-keyframes slide-out2 {
+  0% { -webkit-transform: translateX(0%); }
+  50% { -webkit-transform: translateX(120%); }
+  100% { -webkit-transform: translateX(0%); }
+}
