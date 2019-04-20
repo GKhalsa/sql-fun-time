@@ -190,22 +190,6 @@ const insertIntoTitleGen = () => {
     return titles.map(title => insertIntoTitle(title)).join("")
 };
 
-const setupMovieDB = () => (
-    createMovieTable + createTitleTable + createBoxOfficeTable + createActorTable +
-    insertIntoTitleGen() + insertIntoActorGen() +
-    insertIntoBoxOffice(8.3,23000000, 84780771,224116275) + insertIntoBoxOffice(7.3, 20000000, 63859435, 131384029) +
-    insertIntoBoxOffice(7.4, 4000000, 27854932, 37191755) + insertIntoBoxOffice(8.1, 20000000, 45055776, 53219462) +
-    insertIntoBoxOffice(7.7, 18000000, 42340598, 60874496) + insertIntoBoxOffice(8.1, 20000000, 56671993, 131061209) +
-    insertIntoBoxOffice(7.7, 44500000, 136025503, 96300000) +  insertIntoBoxOffice(7.9, 15000000, 44671682, 88761174) +
-    insertIntoMovie(1,1,1) +insertIntoMovie(1,1,2) + insertIntoMovie(1,1,3) +
-    insertIntoMovie(2,2,4) + insertIntoMovie(2,2,5) + insertIntoMovie(2,2,6) + insertIntoMovie(2,2,7) +
-    insertIntoMovie(3,3,2) + insertIntoMovie(3,3,8) + insertIntoMovie(3,3,9) + insertIntoMovie(3,3,10) +
-    insertIntoMovie(4,4,11) + insertIntoMovie(4,4,12) + insertIntoMovie(4,4,13) + insertIntoMovie(4,4,14) +
-    insertIntoMovie(5,5,13) + insertIntoMovie(5,5,15) + insertIntoMovie(5,5,16) + insertIntoMovie(5,5,17) +
-    insertIntoMovie(6,6,18) + insertIntoMovie(6,6,19) + insertIntoMovie(6,6,20) + insertIntoMovie(6,6,21) +
-    insertIntoMovie(7,7,22) + insertIntoMovie(7,7,23) + insertIntoMovie(7,7,24) + insertIntoMovie(7,7,25) + insertIntoMovie(7,7,26) +
-    insertIntoMovie(8,8,27) + insertIntoMovie(8,8,28) + insertIntoMovie(8,8,29) + insertIntoMovie(8,8,24)
-);
 
 export const levelText = {
     1: <div>Hello and welcome to SQL fun time! Here you will go through a series of exercises all targeted at making you proficient in SQL! Query information from the database with the <code>SELECT</code> statement. Try writing the query <code>SELECT * FROM person</code> below to get all of the data from the <code>person</code> table</div>,
@@ -254,7 +238,24 @@ export const levels = {
     19: "LEFT JOIN",
     20: "CHALLENGE LEVEL 1",
     21: "CHALLENGE LEVEL 2"
-}
+};
+
+const setupMovieDB = () => (
+    createMovieTable + createTitleTable + createBoxOfficeTable + createActorTable +
+    insertIntoTitleGen() + insertIntoActorGen() +
+    insertIntoBoxOffice(8.3,23000000, 84780771,224116275) + insertIntoBoxOffice(7.3, 20000000, 63859435, 131384029) +
+    insertIntoBoxOffice(7.4, 4000000, 27854932, 37191755) + insertIntoBoxOffice(8.1, 20000000, 45055776, 53219462) +
+    insertIntoBoxOffice(7.7, 18000000, 42340598, 60874496) + insertIntoBoxOffice(8.1, 20000000, 56671993, 131061209) +
+    insertIntoBoxOffice(7.7, 44500000, 136025503, 96300000) +  insertIntoBoxOffice(7.9, 15000000, 44671682, 88761174) +
+    insertIntoMovie(1,1,1) +insertIntoMovie(1,1,2) + insertIntoMovie(1,1,3) +
+    insertIntoMovie(2,2,4) + insertIntoMovie(2,2,5) + insertIntoMovie(2,2,6) + insertIntoMovie(2,2,7) +
+    insertIntoMovie(3,3,2) + insertIntoMovie(3,3,8) + insertIntoMovie(3,3,9) + insertIntoMovie(3,3,10) +
+    insertIntoMovie(4,4,11) + insertIntoMovie(4,4,12) + insertIntoMovie(4,4,13) + insertIntoMovie(4,4,14) +
+    insertIntoMovie(5,5,13) + insertIntoMovie(5,5,15) + insertIntoMovie(5,5,16) + insertIntoMovie(5,5,17) +
+    insertIntoMovie(6,6,18) + insertIntoMovie(6,6,19) + insertIntoMovie(6,6,20) + insertIntoMovie(6,6,21) +
+    insertIntoMovie(7,7,22) + insertIntoMovie(7,7,23) + insertIntoMovie(7,7,24) + insertIntoMovie(7,7,25) + insertIntoMovie(7,7,26) +
+    insertIntoMovie(8,8,27) + insertIntoMovie(8,8,28) + insertIntoMovie(8,8,29) + insertIntoMovie(8,8,24)
+);
 
 export const queries = {
     1: {databaseSetup: createPersonTable + insertIntoPerson('Devin',26) + insertIntoPerson('Asem',12) , answer: "SELECT * FROM person;"},

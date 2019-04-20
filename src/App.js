@@ -136,14 +136,13 @@ class App extends Component {
     };
 
     determineSlideAnimation = () => {
-        const {slideAnimation} = this.state;
-        return slideAnimation === "slide-out1" ? "slide-out2" : "slide-out1";
-    }
+        return this.state.slideAnimation === "slide-out1" ? "slide-out2" : "slide-out1";
+    };
 
     reset = () => {
         localStorage.removeItem('sqlState');
         this.setState({level:1, completedLevels:[]})
-    }
+    };
 
     render() {
         const {queryValues, queryColumns, expectedColumns, expectedValues, tablesWithValues, level, completedLevels, submitGlow,slideAnimation, error} = this.state;
