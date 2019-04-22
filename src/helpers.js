@@ -82,3 +82,39 @@ export const formatValues = (columns, values) => {
         }, {})
     });
 }
+
+export const levels = {
+    1: "SELECT pt.1",
+    2: "SELECT pt.2",
+    3: "SELECT pt.3",
+    4: "WHERE pt.1",
+    5: "WHERE pt.2",
+    6: "WHERE pt.3",
+    7: "LIKE",
+    8: "AGGREGATE pt.1",
+    9: "AGGREGATE pt.2",
+    10: "AGGREGATE pt.3",
+    11: "ORDER BY",
+    12: "GROUP BY pt.1",
+    13: "GROUP BY pt.2",
+    14: "GROUP BY pt.3",
+    15: "INNER JOIN pt.1",
+    16: "INNER JOIN pt.2",
+    17: "INNER JOIN pt.3",
+    18: "MULTIPLE TABLES",
+    19: "LEFT JOIN",
+    20: "CHALLENGE LEVEL 1",
+    21: "CHALLENGE LEVEL 2"
+};
+
+export const sortedLevels = (levels) => {
+    const midPoint = Math.ceil(Object.keys(levels).length / 2);
+    let sorted = [];
+    for(let i = 0; i < midPoint; i++) {
+        if ((i + 1) !== midPoint) {
+            sorted.push((i + 1));
+        }
+        sorted.push((i + midPoint));
+    }
+    return sorted;
+};

@@ -108,10 +108,10 @@ i {
 .level__drop__box {
   position: absolute;
   z-index: 2;
-  transform: translateX(-0.55em);
+  transform: translateX(-3.873em);
   box-shadow: 0 0 13px -3px #000;
-  height: 4.5em;
-  width: 5em;
+  height: 10em;
+  width: 12em;
   background-color: #7787b2;
   display: flex;
   flex-direction: column;
@@ -124,24 +124,23 @@ i {
   align-content: flex-start;
 }
 
-.drop__box__button__wrapper {
-
-}
-
 .clear__button {
-  border-radius: 5px;
+  color: white;
+  padding-top: 0.5em;
   font-family: 'PT Sans', sans-serif;
   cursor: pointer;
-  font-weight: bold;
+  font-size: 16px;
 }
 
 .level__option {
+  font-family: 'Poppins', sans-serif;
   box-shadow: 0 0 13px -3px #000;
-  width: 1.2em;
+  padding-left: 0.4em;
+  width: 11.2em;
   height: 1.2em;
   font-size: 0.5em;
-  border-radius: 43px;
-  text-align: center;
+  border-radius: 2px;
+  text-align: left;
   cursor: pointer;
   margin: 2px;
   line-height: 1.4em;

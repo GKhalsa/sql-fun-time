@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import AceEditor from 'react-ace';
 import sql from 'sql.js';
 import {levelText, queries, levels} from './levelData'
-import {checkForMatch, determineGlow, formatValues, formatColumns} from './helpers'
+import {checkForMatch, determineGlow, formatValues, formatColumns, sortedLevels} from './helpers'
 import {Table} from './Table'
 import octocat from './GitHub-Mark-64px.png';
 import twitterLogo from './twitter-logo.png'
@@ -177,16 +177,16 @@ class App extends Component {
 
                                                 <div className="drop__box__levels dropdown">
                                                     {
-                                                        Object.keys(levelText).map((levelNum) => {
+                                                        sortedLevels(levels).map((levelNum) => {
                                                             return (
-                                                                <div onClick={() => this.setState({level: parseInt(levelNum)})} className={`level__option dropdown ${completedLevels.some(completedLevel => completedLevel == levelNum.toString()) ? "level__complete":""} ${levelNum == level ? "current__level__option":""}`}>{levelNum}</div>
+                                                                <div onClick={() => this.setState({level: parseInt(levelNum)})} className={`level__option dropdown ${completedLevels.some(completedLevel => completedLevel == levelNum.toString()) ? "level__complete":""} ${levelNum == level ? "current__level__option":""}`}>{`${levelNum}: ${levels[levelNum]}`}</div>
                                                             )
                                                         })
                                                     }
                                                 </div>
 
                                                 <div className="drop__box__button__wrapper dropdown">
-                                                    <button onClick={() => this.reset()} className="clear__button dropdown">reset</button>
+                                                    <div onClick={() => this.reset()} className="clear__button dropdown">Reset</div>
                                                 </div>
 
                                             </div>
