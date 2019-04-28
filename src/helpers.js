@@ -1,6 +1,23 @@
 const checkThatAllValuesExist = (obj1, obj2) => {
-    return Object.keys(obj1).every(key => {
-        return obj1[key] === obj2[key]
+    return Object.keys(obj1).every(keyCheck => {
+        for (let key in obj1) {
+            let temp;
+            if (obj1.hasOwnProperty(key)) {
+                temp = obj1[key];
+                delete obj1[key];
+                obj1[key.charAt(0).toUpperCase() + key.substring(1)] = temp;
+            }
+        }
+
+        for (let key in obj2) {
+            let temp;
+            if (obj2.hasOwnProperty(key)) {
+                temp = obj2[key];
+                delete obj2[key];
+                obj2[key.charAt(0).toUpperCase() + key.substring(1)] = temp;
+            }
+        }
+        return obj1[keyCheck.toUpperCase()] === obj2[keyCheck.toUpperCase()]
     })
 }
 
@@ -15,7 +32,7 @@ const areObjectsEqual = (obj1, obj2) => {
 const checkThatEveryColumnExists = (trialColumns, matchColumns) => {
     return trialColumns.every((trialColumn) => {
         return matchColumns.some((matchColumn) => {
-            return trialColumn.accessor === matchColumn.accessor;
+            return trialColumn.accessor.toLowerCase() === matchColumn.accessor.toLowerCase();
         })
     });
 }
