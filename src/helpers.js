@@ -5,7 +5,9 @@ const checkThatAllValuesExist = (obj1, obj2) => {
             if (obj1.hasOwnProperty(key)) {
                 temp = obj1[key];
                 delete obj1[key];
-                obj1[key.charAt(0).toUpperCase() + key.substring(1)] = temp;
+                let lowerCaseKey = key.toLowerCase();
+                obj1[lowerCaseKey] = temp;
+                // obj1[key.charAt(0).toUpperCase() + key.substring(1)] = temp;
             }
         }
 
@@ -14,15 +16,16 @@ const checkThatAllValuesExist = (obj1, obj2) => {
             if (obj2.hasOwnProperty(key)) {
                 temp = obj2[key];
                 delete obj2[key];
-                obj2[key.charAt(0).toUpperCase() + key.substring(1)] = temp;
+                let lowerCaseKey = key.toLowerCase();
+                obj2[lowerCaseKey] = temp;
+                // obj2[key.charAt(0).toUpperCase() + key.substring(1)] = temp;
             }
         }
-        return obj1[keyCheck.toUpperCase()] === obj2[keyCheck.toUpperCase()]
+        return obj1[keyCheck.toLowerCase()] === obj2[keyCheck.toLowerCase()]
     })
 }
 
 const areObjectsEqual = (obj1, obj2) => {
-
     const a = checkThatAllValuesExist(obj1, obj2);
     const b = checkThatAllValuesExist(obj2, obj1);
 
