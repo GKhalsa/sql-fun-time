@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="998b56e7-00d9-40c2-9282-baa72d4dcb50" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/helpers.js" afterPath="$PROJECT_DIR$/src/helpers.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/levelData.js" afterPath="$PROJECT_DIR$/src/levelData.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -36,11 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="levelData.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="levelData.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/levelData.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="240" column="2" lean-forward="true" selection-start-line="218" selection-start-column="0" selection-end-line="240" selection-end-column="2" />
+            <state relative-caret-position="615">
+              <caret line="264" column="223" lean-forward="false" selection-start-line="264" selection-start-column="223" selection-end-line="264" selection-end-column="223" />
               <folding />
             </state>
           </provider>
@@ -56,7 +56,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="helpers.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="helpers.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/helpers.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="437">
@@ -105,11 +105,11 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/src/Table.js" />
         <option value="$PROJECT_DIR$/src/Table.css" />
-        <option value="$PROJECT_DIR$/src/levelData.js" />
         <option value="$PROJECT_DIR$/public/index.html" />
         <option value="$PROJECT_DIR$/src/App.css" />
         <option value="$PROJECT_DIR$/src/App.js" />
         <option value="$PROJECT_DIR$/src/helpers.js" />
+        <option value="$PROJECT_DIR$/src/levelData.js" />
       </list>
     </option>
   </component>
@@ -643,12 +643,12 @@
       <workItem from="1550800476121" duration="6707000" />
       <workItem from="1552412375860" duration="3911000" />
       <workItem from="1552875951013" duration="119438000" />
-      <workItem from="1555622580144" duration="23035000" />
+      <workItem from="1555622580144" duration="23316000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="161656000" />
+    <option name="totallyTimeSpent" value="161937000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1676" height="1027" extended-state="6" />
@@ -928,6 +928,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/helpers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="23" column="17" lean-forward="false" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/App.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="568">
@@ -950,16 +958,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/levelData.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="240" column="2" lean-forward="true" selection-start-line="218" selection-start-column="0" selection-end-line="240" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/helpers.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="23" column="17" lean-forward="false" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
+        <state relative-caret-position="615">
+          <caret line="264" column="223" lean-forward="false" selection-start-line="264" selection-start-column="223" selection-end-line="264" selection-end-column="223" />
           <folding />
         </state>
       </provider>
